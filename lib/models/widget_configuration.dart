@@ -9,6 +9,10 @@ WidgetConfiguration widgetConfigurationFromJson(String str) => WidgetConfigurati
 String widgetConfigurationToJson(WidgetConfiguration data) => json.encode(data.toJson());
 
 class WidgetConfiguration {
+  String? businessName;
+  String? businessNumbers;
+  int? id;
+  DateTime? dateCreated;
   String? logo;
   String? pageMessage;
   String? jumbotron;
@@ -23,15 +27,17 @@ class WidgetConfiguration {
   String? primaryBgColor;
   String? secondaryBgColor;
   bool? isActive;
-  int? id;
-  String? businessName;
-  dynamic archived;
-  String? lastModified;
-  String? dateCreated;
-  dynamic business;
-  String? businessNumbers;
+  String? webhookUrl;
+  int? business;
+  int? addonSubscription;
+  int? dialGroup;
+  String? widgetType;
 
   WidgetConfiguration({
+    this.businessName,
+    this.businessNumbers,
+    this.id,
+    this.dateCreated,
     this.logo,
     this.pageMessage,
     this.jumbotron,
@@ -46,16 +52,18 @@ class WidgetConfiguration {
     this.primaryBgColor,
     this.secondaryBgColor,
     this.isActive,
-    this.id,
-    this.businessName,
-    this.archived,
-    this.lastModified,
-    this.dateCreated,
+    this.webhookUrl,
     this.business,
-    this.businessNumbers,
+    this.addonSubscription,
+    this.dialGroup,
+    this.widgetType,
   });
 
   factory WidgetConfiguration.fromJson(Map<String, dynamic> json) => WidgetConfiguration(
+    businessName: json["business_name"],
+    businessNumbers: json["business_numbers"],
+    id: json["id"],
+    dateCreated: json["date_created"] == null ? null : DateTime.parse(json["date_created"]),
     logo: json["logo"],
     pageMessage: json["page_message"],
     jumbotron: json["jumbotron"],
@@ -70,16 +78,18 @@ class WidgetConfiguration {
     primaryBgColor: json["primary_bg_color"],
     secondaryBgColor: json["secondary_bg_color"],
     isActive: json["is_active"],
-    id: json["id"],
-    businessName: json["business_name"],
-    archived: json["archived"],
-    lastModified: json["last_modified"],
-    dateCreated: json["date_created"],
+    webhookUrl: json["webhook_url"],
     business: json["business"],
-    businessNumbers: json["business_numbers"],
+    addonSubscription: json["addon_subscription"],
+    dialGroup: json["dial_group"],
+    widgetType: json["widget_type"],
   );
 
   Map<String, dynamic> toJson() => {
+    "business_name": businessName,
+    "business_numbers": businessNumbers,
+    "id": id,
+    "date_created": dateCreated?.toIso8601String(),
     "logo": logo,
     "page_message": pageMessage,
     "jumbotron": jumbotron,
@@ -94,12 +104,10 @@ class WidgetConfiguration {
     "primary_bg_color": primaryBgColor,
     "secondary_bg_color": secondaryBgColor,
     "is_active": isActive,
-    "id": id,
-    "business_name": businessName,
-    "archived": archived,
-    "last_modified": lastModified,
-    "date_created": dateCreated,
+    "webhook_url": webhookUrl,
     "business": business,
-    "business_numbers": businessNumbers,
+    "addon_subscription": addonSubscription,
+    "dial_group": dialGroup,
+    "widget_type": widgetType,
   };
 }

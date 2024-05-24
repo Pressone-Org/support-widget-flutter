@@ -12,9 +12,10 @@ import 'user_web_service.dart';
 class UserWebServiceImpl extends UserWebService {
   final NetworkAPICall _networkAPICall = NetworkAPICall();
 
+  String? token;
 
   @override
-  Future<Line> getReceiverLineDetail({required Geofencing geofencing}) async {
+  Future<Line> getReceiverLineDetail({required Geofencing geofencing, required String token}) async {
     try {
       var body = {
         "public_key": geofencing.public_key,
@@ -23,7 +24,7 @@ class UserWebServiceImpl extends UserWebService {
       var response = await _networkAPICall
           .postHttp(getReceiverLine, jsonEncode(body), header: {
       HttpHeaders.authorizationHeader:
-      'Pressone-X-Pub-Key: pk_6UFQK85kbYAObTuUbbcqoXf8Xei3M',
+      'Pressone-X-Pub-Key: $token',
         HttpHeaders.contentTypeHeader: "application/json"
       });
 
@@ -37,14 +38,22 @@ class UserWebServiceImpl extends UserWebService {
   }
 
   @override
-  Future<WidgetConfiguration> getWidgetConfiguration() async {
+  Future<WidgetConfiguration> getWidgetConfiguration({required String token}) async {
     try {
       var response = await _networkAPICall
           .getHttp(getWidgetConfigurationEndpoint, header: {
       HttpHeaders.authorizationHeader:
-      'Pressone-X-Pub-Key: pk_6UFQK85kbYAObTuUbbcqoXf8Xei3M',
+      'Pressone-X-Pub-Key: $token',
       "Pressone-Platform": Platform.isIOS ? "ios" : "android"
       });
+
+      print({
+        HttpHeaders.authorizationHeader:
+        'Pressone-X-Pub-Key: $token',
+        "Pressone-Platform": Platform.isIOS ? "ios" : "android"
+      });
+
+      print(token);
 
       print('User data is ${response.toString()}');
       WidgetConfiguration user = WidgetConfiguration.fromJson(response);

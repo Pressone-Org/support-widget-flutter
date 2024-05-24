@@ -26,7 +26,7 @@ class NetworkAPICall {
       {Map<String, String>? header}) async {
     final client = http.Client();
     try {
-      final String fullURL = "https://api.pressone.co/api/" + url;
+      final String fullURL = "https://pressone-test-252281de-ddc2cd5e9c01.herokuapp.com/api/" + url;
       print(fullURL);
       final response =
           await client.post(Uri.parse(fullURL), body: body, headers: header);
@@ -61,7 +61,7 @@ class NetworkAPICall {
       {Map<String, String>? header, bool isToken = true}) async {
     final client = http.Client();
     try {
-      final String fullURL = "https://api.pressone.co/" + url;
+      final String fullURL = "https://pressone-test-252281de-ddc2cd5e9c01.herokuapp.com/api/" + url;
       print(fullURL);
       final response = await client.get(
         Uri.parse(fullURL),
