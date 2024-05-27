@@ -1,18 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
+import 'package:live_call_widget_flutter/models/line.dart';
 
-class EnterYourName extends StatefulWidget {
+class EnterYourNumber extends StatefulWidget {
   final PageController pageController;
 
-  const EnterYourName({super.key, required this.pageController});
+  const EnterYourNumber({super.key, required this.pageController});
 
   @override
-  State<EnterYourName> createState() => _EnterYourNameState();
+  State<EnterYourNumber> createState() => _EnterYourNumberState();
 }
 
-class _EnterYourNameState extends State<EnterYourName> {
-  final TextEditingController _nameController = TextEditingController();
+class _EnterYourNumberState extends State<EnterYourNumber> {
+  final TextEditingController _phoneNumberController = TextEditingController();
+  Line? line;
 
   @override
   Widget build(BuildContext context) {
@@ -167,23 +170,32 @@ class _EnterYourNameState extends State<EnterYourName> {
                           Row(
                             children: [
                               Expanded(
-                                child: TextField(
+                                child: IntlPhoneField(
+                                  iconPosition: IconPosition.trailing,
                                   decoration: InputDecoration(
-                                    hintText: 'gacad@google.com',
                                     border: UnderlineInputBorder(),
+                                    hintText: "8148642968"
                                   ),
+                                  initialCountryCode: 'NG', // Nigeria
+                                  onChanged: (phone) {
+                                    print(phone.completeNumber);
+                                    print(phone.number.toString());
+                                    _phoneNumberController.text = phone.number.toString();// Output the full number when it changes
+                                  },
                                 ),
                               ),
+
                               const SizedBox(
-                                width: 20,
+                                width: 10,
                               ),
+
                               ElevatedButton(
                                 onPressed: () {
                                   widget.pageController.nextPage(
                                     duration: Duration(milliseconds: 300),
                                     curve: Curves.easeInOut,
                                   );
-
+                                  // print("Name entered: ${_nameController.text}");
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all<Color>(
@@ -256,7 +268,7 @@ class _EnterYourNameState extends State<EnterYourName> {
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _phoneNumberController.dispose();
     super.dispose();
   }
 }

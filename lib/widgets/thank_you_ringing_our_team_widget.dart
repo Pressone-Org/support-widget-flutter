@@ -12,7 +12,25 @@ class ThankYouRingingOurTeam extends StatefulWidget {
   State<ThankYouRingingOurTeam> createState() => _ThankYouRingingOurTeamState();
 }
 
-class _ThankYouRingingOurTeamState extends State<ThankYouRingingOurTeam> {
+class _ThankYouRingingOurTeamState extends State<ThankYouRingingOurTeam> with SingleTickerProviderStateMixin {
+
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 4));
+
+    _animationController.forward();
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        widget.pageController.nextPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SizedBox(

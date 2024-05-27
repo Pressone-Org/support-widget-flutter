@@ -55,6 +55,9 @@ class MySdk {
       keyPair1.privateKey,
     );
 
+    line.init();
+    line.connect();
+
   }
 }
 
@@ -161,7 +164,7 @@ class _PageViewWidgetState extends State<_PageViewWidget> {
 
               // Screen five
               Center(
-                  child: EnterYourName(
+                  child: EnterYourNumber(
                     pageController: _pageController,
                   )),
 

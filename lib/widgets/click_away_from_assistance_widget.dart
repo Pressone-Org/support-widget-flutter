@@ -260,7 +260,9 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                 height: 18,
               ),
 
-              Image.network("https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/chafinch-flying-flight-bird-animal-ks1_ver_1.png"),
+              Image(image: AssetImage("assets/svg/p.png", package: "live_call_widget_flutter")),
+
+              // Image.network("https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/chafinch-flying-flight-bird-animal-ks1_ver_1.png"),
 
               // Assets.svg.poweredPressone.svg(),
 

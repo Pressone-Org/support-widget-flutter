@@ -19,6 +19,8 @@ dependencies:
   logger: ^1.4.0
   sip_ua: ^0.5.6
   flutter_webrtc: ^0.9.48+hotfix.1
+  intl_phone_field: ^2.1.0
+  lottie: ^3.1.2
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +47,7 @@ flutter:
      - assets/svg/close_btn.svg
      - assets/svg/company_logo.svg
      - assets/svg/powered_pressone.svg
+     - assets/svg/p.png
 
 
    fonts:
