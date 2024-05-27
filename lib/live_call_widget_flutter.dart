@@ -2,431 +2,192 @@ library live_call_widget_flutter;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:live_call_widget_flutter/generated/assets/assets.gen.dart';
-import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
+import 'package:live_call_widget_flutter/models/geofencing.dart';
+import 'package:live_call_widget_flutter/models/line.dart';
+import 'package:live_call_widget_flutter/models/widget_configuration.dart';
+import 'package:live_call_widget_flutter/network/user/user_web_service_impl.dart';
+import 'package:fast_rsa/fast_rsa.dart';
+import 'package:live_call_widget_flutter/widgets/click_away_from_assistance_widget.dart';
+import 'package:live_call_widget_flutter/widgets/connecting_widget.dart';
+import 'package:live_call_widget_flutter/widgets/enter_your_number_widget.dart';
+import 'package:live_call_widget_flutter/widgets/please_hold_on_widget.dart';
+import 'package:live_call_widget_flutter/widgets/ringing_widget.dart';
+import 'package:live_call_widget_flutter/widgets/share_your_name_widget.dart';
+import 'package:live_call_widget_flutter/widgets/thank_you_for_contacting_us_widget.dart';
+import 'package:live_call_widget_flutter/widgets/thank_you_for_providing_feedback_widget.dart';
+import 'package:live_call_widget_flutter/widgets/thank_you_ringing_our_team_widget.dart';
+import 'package:live_call_widget_flutter/widgets/we_value_your_feedback_widget.dart';
 
 class MySdk {
+
   static Future<void> show(BuildContext context) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
       builder: (BuildContext context) {
-        return _MySdkScreen4();
+        return MainBottomSheet();
       },
     );
   }
-}
 
-class _MySdkScreen1 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.85,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   crossAxisAlignment: CrossAxisAlignment.end,
-          //   children: [
-          //     // Assets.svg.closeBtn.svg()
-          //   ],
-          // ),
-          const Spacer(),
+  static setAPIKEY(String apiKey) async {
+    WidgetConfiguration? widgetConfiguration;
 
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 47),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 18),
-                  child: Text(
-                    'You are a click away from assistance',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF173556),
-                      fontSize: 24,
-                      fontFamily: FontFamily.avertaDemoPECuttedDemo,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
+    Line? line;
 
-                SizedBox(
-                  height: 12,
-                ),
+    widgetConfiguration = await UserWebServiceImpl().getWidgetConfiguration(token: apiKey);
 
-                Text(
-                  'Click on the button to talk to someone on our team',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF6F8195),
-                    fontSize: 18,
-                    fontFamily: FontFamily.avertaDemoPECuttedDemo,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+    //
+    KeyPair keyPair1 = await RSA.generate(2048);
 
-                SizedBox(
-                  height: 47,
-                ),
-                // Assets.svg.callButton.svg(),
-              ],
-            ),
-          ),
+    Geofencing geofencing = Geofencing(public_key: keyPair1.publicKey);
 
-          const Spacer(),
+    print(keyPair1.publicKey);
+    print(keyPair1.privateKey);
 
-          const Text.rich(
-            TextSpan(
-              text:
-                  'By dialling, you consent to Prime Pay collecting, processing, and storing my information in accordance with our ',
-              style: TextStyle(
-                color: Color(0xFF667185),
-                fontSize: 12,
-                fontFamily: FontFamily.avertaDemoPECuttedDemo,
-                fontWeight: FontWeight.w400,
-              ),
-              children: [
-                TextSpan(
-                  text: 'Privacy Policies.',
-                  style: TextStyle(
-                    color: Color(0xFF00AEEF),
-                    fontSize: 12,
-                    fontFamily: FontFamily.avertaDemoPECuttedDemo,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-            textAlign: TextAlign.center,
-          ),
+    line = await UserWebServiceImpl().getReceiverLineDetail(geofencing: geofencing, token: apiKey);
 
-          const SizedBox(
-            height: 18,
-          ),
-
-          // Assets.svg.poweredPressone.svg(),
-
-          const SizedBox(
-            height: 24,
-          ),
-
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 10,
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(color: Color(0xFF1571D8)),
-          )
-          // ElevatedButton(
-          //   onPressed: () {
-          //     Navigator.push(context,
-          //         MaterialPageRoute(builder: (context) => _MySdkScreen2()));
-          //   },
-          //   child: Text('Next'),
-          // ),
-        ],
-      ),
+    line.password = await RSA.decryptOAEP(
+      line.password!,
+      "",
+      Hash.SHA256,
+      keyPair1.privateKey,
     );
+
+    line.init();
+    line.connect();
+
   }
 }
 
-class _MySdkScreen2 extends StatelessWidget {
+
+class MainBottomSheet extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.85,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   crossAxisAlignment: CrossAxisAlignment.end,
-          //   children: [
-          //     // Assets.svg.closeBtn.svg()
-          //   ],
-          // ),
-          const Spacer(),
-
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Please hold on.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF6F8195),
-                    fontSize: 32,
-                    fontFamily: FontFamily.avertaDemoPECuttedDemo,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-
-                Text(
-                  'Connecting you',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF173556),
-                    fontSize: 32,
-                    fontFamily: FontFamily.avertaDemoPECuttedDemo,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Text(
-                  'to our team...',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF173556),
-                    fontSize: 32,
-                    fontFamily: FontFamily.avertaDemoPECuttedDemo,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-
-                SizedBox(
-                  height: 47,
-                ),
-                // Assets.svg.callButton.svg(),
-
-                Row(
-                  children: [
-                    Icon(CupertinoIcons.refresh_circled,
-                        color: Color(0xFF00AEEF)),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'Connecting.',
-                      style: TextStyle(
-                        color: Color(0xFF667185),
-                        fontSize: 16,
-                        fontFamily: FontFamily.avertaDemoPECuttedDemo,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-
-          const Spacer(),
-
-          const SizedBox(
-            height: 18,
-          ),
-
-          // Assets.svg.poweredPressone.svg(),
-
-          const SizedBox(
-            height: 24,
-          ),
-
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 10,
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(color: Color(0xFF1571D8)),
-          )
-          // ElevatedButton(
-          //   onPressed: () {
-          //     Navigator.push(context,
-          //         MaterialPageRoute(builder: (context) => _MySdkScreen2()));
-          //   },
-          //   child: Text('Next'),
-          // ),
-        ],
-      ),
-    );
-  }
+  State<MainBottomSheet> createState() => _MainBottomSheetState();
 }
 
-class _MySdkScreen3 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text('Screen 3', style: TextStyle(fontSize: 24)),
-          ElevatedButton(
-            onPressed: () {
-              _closeSdk(context);
-            },
-            child: const Text('Close SDK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _closeSdk(BuildContext context) {
-    Navigator.pop(context); // Close Screen 3
-    Navigator.pop(context); // Close Screen 2
-    Navigator.pop(context); // Close Screen 1
-  }
-}
-
-class _MySdkScreen4 extends StatefulWidget {
-  @override
-  _MySdkScreen4State createState() => _MySdkScreen4State();
-}
-
-class _MySdkScreen4State extends State<_MySdkScreen4> {
-  final TextEditingController _nameController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.85,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              // Assets.svg.closeBtn.svg(),
-            ],
-          ),
-          const Spacer(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Card(
-              elevation: 8,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "While we connect you, kindly share your name with us?",
-                      style: TextStyle(
-                        color: Color(0xFF173556),
-                        fontSize: 18,
-                        fontFamily: 'AvertaDemoPECuttedDemo',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const Text("Enter your name",
-                        style: TextStyle(color: Colors.grey)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _nameController,
-                            cursorColor: Colors.black,
-                            style: const TextStyle(color: Colors.black),
-                            decoration: const InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black),
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            // print("Name entered: ${_nameController.text}");
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color(0xFF1671D9),
-                            ),
-                            shape: MaterialStateProperty.all<CircleBorder>(
-                              const CircleBorder(),
-                            ),
-                          ),
-                          child: const Icon(
-                            CupertinoIcons.arrow_right,
-                            size: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          // Assets.svg.callButton.svg(),
-
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                Icon(CupertinoIcons.refresh_circled, color: Color(0xFF00AEEF)),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Connecting.',
-                  style: TextStyle(
-                    color: Color(0xFF667185),
-                    fontSize: 16,
-                    fontFamily: FontFamily.avertaDemoPECuttedDemo,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Spacer(),
-          const SizedBox(
-            height: 18,
-          ),
-          // Assets.svg.poweredPressone.svg(),
-          const SizedBox(
-            height: 24,
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 10,
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(
-              color: Color(0xFF1571D8),
-            ),
-          ),
-          // ElevatedButton(
-          //   onPressed: () {
-          //     Navigator.push(context,
-          //         MaterialPageRoute(builder: (context) => _MySdkScreen2()));
-          //   },
-          //   child: Text('Next'),
-          // ),
-        ],
-      ),
-    );
-  }
+class _MainBottomSheetState extends State<MainBottomSheet> {
+  PageController _pageController = PageController();
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _pageController.dispose();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.85,
+      decoration: new BoxDecoration(
+        color: Colors.white,
+        borderRadius: new BorderRadius.only(
+          topLeft: const Radius.circular(25.0),
+          topRight: const Radius.circular(25.0),
+        ),
+      ),
+      child: _PageViewWidget(),
+    );
+  }
+}
+
+class _PageViewWidget extends StatefulWidget {
+  @override
+  _PageViewWidgetState createState() => _PageViewWidgetState();
+}
+
+class _PageViewWidgetState extends State<_PageViewWidget> {
+  PageController _pageController = PageController();
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: PageView(
+            controller: _pageController,
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+
+              // Screen one
+              Center(
+                  child: ClickAwayFromAssistance(
+                    pageController: _pageController,
+                  )),
+
+              // Screen two
+              Center(
+                  child: PleaseHoldOn(
+                    pageController: _pageController,
+                  )),
+
+              // Screen two
+              Center(
+                  child: Connecting(
+                    pageController: _pageController,
+                  )),
+
+              // Screen three
+              Center(
+                  child: ShareYourName(
+                    pageController: _pageController,
+                  )),
+
+              Center(
+                  child: Connecting(
+                    pageController: _pageController,
+                  )),
+
+              // Screen three
+              Center(
+                  child: Ringing(
+                    pageController: _pageController,
+                  )),
+
+              // Screen four
+              Center(
+                  child: ThankYouRingingOurTeam(
+                    pageController: _pageController,
+                  )),
+              // Screen four
+              Center(
+                  child: Ringing(
+                    pageController: _pageController,
+                  )),
+
+              // Screen five
+              Center(
+                  child: EnterYourNumber(
+                    pageController: _pageController,
+                  )),
+
+              // Screen five
+              Center(
+                  child: ThankYouForContactingUs(
+                    pageController: _pageController,
+                  )),
+
+              // Screen five
+              Center(
+                  child: WeValueYourFeedback(
+                    pageController: _pageController,
+                  )),
+
+              // Screen six
+              Center(
+                child: ThankYouForProvidingFeedback(),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
