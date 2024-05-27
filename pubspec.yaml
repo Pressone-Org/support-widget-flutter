@@ -48,6 +48,7 @@ flutter:
      - assets/svg/company_logo.svg
      - assets/svg/powered_pressone.svg
      - assets/svg/p.png
+     - assets/json/connecting.json
 
 
    fonts:
