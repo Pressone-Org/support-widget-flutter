@@ -264,7 +264,7 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
               // Image(image: AssetImage("assets/svg/p.png", package: "live_call_widget_flutter")),
 
               Lottie.network(
-                  'https://gitlab.com/pressone-apps/Live-Call-Widget-Flutter/-/blob/main/assets/json/connecting.json'),
+                  'https://gitlab.com/pressone-apps/Live-Call-Widget-Flutter/main/lib/assets/json/connecting.json'),
 
               // Image.network("https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/chafinch-flying-flight-bird-animal-ks1_ver_1.png"),
 
