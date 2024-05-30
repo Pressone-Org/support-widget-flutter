@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
+import 'package:live_call_widget_flutter/models/widget_configuration.dart';
+import 'package:lottie/lottie.dart';
 
 class Ringing extends StatefulWidget {
 
@@ -14,6 +18,8 @@ class Ringing extends StatefulWidget {
 
 class _RingingState extends State<Ringing> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
+
+  final widgetConfiguration = GetIt.I.get<WidgetConfiguration>();
 
   @override
   void initState() {
@@ -61,79 +67,9 @@ class _RingingState extends State<Ringing> with SingleTickerProviderStateMixin {
                     ),
                   ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 74.40,
-                      height: 74.40,
-                      padding: const EdgeInsets.only(
-                        top: 8.57,
-                        left: 8,
-                        right: 7.88,
-                        bottom: 7.31,
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      decoration: ShapeDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment(0.58, -0.81),
-                          end: Alignment(-0.58, 0.81),
-                          colors: [Colors.white.withOpacity(0.25), Colors.white.withOpacity(0.07999999821186066)],
-                        ),
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            width: 2.07,
-                            color: Colors.white.withOpacity(0.20000000298023224),
-                          ),
-                          borderRadius: BorderRadius.circular(201.69),
-                        ),
-                        shadows: [
-                          BoxShadow(
-                            color: Color(0x3F1B4DFF),
-                            blurRadius: 40.30,
-                            offset: Offset(0, 6.05),
-                            spreadRadius: -15.50,
-                          )
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: double.infinity,
-                              padding: const EdgeInsets.only(
-                                top: 14.63,
-                                left: 18.29,
-                                right: 18.16,
-                                bottom: 13.65,
-                              ),
-                              clipBehavior: Clip.antiAlias,
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(width: 0.67, color: Color(0xFFE4E7EC)),
-                                  borderRadius: BorderRadius.circular(212.80),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: SvgPicture.network(widgetConfiguration.logo!, width: 40, height: 40,),
                 ),
               ),
             ),
@@ -142,16 +78,25 @@ class _RingingState extends State<Ringing> with SingleTickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   crossAxisAlignment: CrossAxisAlignment.end,
-                //   children: [
-                //     // Assets.svg.closeBtn.svg()
-                //   ],
-                // ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 17, top: 17),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: SvgPicture.network(
+                              "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/close.svg")),
+                    ],
+                  ),
+                ),
+
                 const Spacer(),
 
-                const Padding(
+                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,20 +104,8 @@ class _RingingState extends State<Ringing> with SingleTickerProviderStateMixin {
 
                       Row(
                         children: [
-                          Icon(CupertinoIcons.refresh_circled,
-                              color: Color(0xFF00AEEF)),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Ringing.',
-                            style: TextStyle(
-                              color: Color(0xFF667185),
-                              fontSize: 16,
-                              fontFamily: FontFamily.avertaDemoPECuttedDemo,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
+                          Lottie.network(
+                              'https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/Ringing.json'),
                         ],
                       )
                     ],
@@ -185,7 +118,7 @@ class _RingingState extends State<Ringing> with SingleTickerProviderStateMixin {
                   height: 18,
                 ),
 
-                // Assets.svg.poweredPressone.svg(),
+                SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/powered_by_pressone.svg",),
 
                 const SizedBox(
                   height: 24,
@@ -195,7 +128,7 @@ class _RingingState extends State<Ringing> with SingleTickerProviderStateMixin {
                   width: MediaQuery.of(context).size.width,
                   height: 10,
                   clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(color: Color(0xFF1571D8)),
+                  decoration: BoxDecoration(color: Color(int.parse(widgetConfiguration!.primaryBgColor!.replaceAll('#', '0xFF')))),
                 )
               ],
             ),

@@ -4,11 +4,13 @@
 
 import 'dart:convert';
 
+import 'package:live_call_widget_flutter/models/base_model.dart';
+
 WidgetConfiguration widgetConfigurationFromJson(String str) => WidgetConfiguration.fromJson(json.decode(str));
 
 String widgetConfigurationToJson(WidgetConfiguration data) => json.encode(data.toJson());
 
-class WidgetConfiguration {
+class WidgetConfiguration extends BaseModel {
   String? businessName;
   String? businessNumbers;
   int? id;
@@ -30,7 +32,7 @@ class WidgetConfiguration {
   String? webhookUrl;
   int? business;
   int? addonSubscription;
-  int? dialGroup;
+  String? dialGroup;
   String? widgetType;
 
   WidgetConfiguration({

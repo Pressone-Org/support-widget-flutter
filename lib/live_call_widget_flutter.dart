@@ -2,14 +2,20 @@ library live_call_widget_flutter;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
+import 'package:live_call_widget_flutter/helper/storage/storage.dart';
+import 'package:live_call_widget_flutter/models/counter_model.dart';
 import 'package:live_call_widget_flutter/models/geofencing.dart';
 import 'package:live_call_widget_flutter/models/line.dart';
 import 'package:live_call_widget_flutter/models/widget_configuration.dart';
 import 'package:live_call_widget_flutter/network/user/user_web_service_impl.dart';
 import 'package:fast_rsa/fast_rsa.dart';
+import 'package:live_call_widget_flutter/viewmodel/calls_viewmodel.dart';
 import 'package:live_call_widget_flutter/widgets/click_away_from_assistance_widget.dart';
 import 'package:live_call_widget_flutter/widgets/connecting_widget.dart';
 import 'package:live_call_widget_flutter/widgets/enter_your_number_widget.dart';
+import 'package:live_call_widget_flutter/widgets/ongoing_call_widget.dart';
 import 'package:live_call_widget_flutter/widgets/please_hold_on_widget.dart';
 import 'package:live_call_widget_flutter/widgets/ringing_widget.dart';
 import 'package:live_call_widget_flutter/widgets/share_your_name_widget.dart';
@@ -18,9 +24,11 @@ import 'package:live_call_widget_flutter/widgets/thank_you_for_providing_feedbac
 import 'package:live_call_widget_flutter/widgets/thank_you_ringing_our_team_widget.dart';
 import 'package:live_call_widget_flutter/widgets/we_value_your_feedback_widget.dart';
 
-class MySdk {
+import 'config/app_constants.dart';
 
-  static Future<void> show(BuildContext context) async {
+class LiveCallWidget {
+
+  static Future<void> showWidget(BuildContext context) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -32,21 +40,38 @@ class MySdk {
   }
 
   static setAPIKEY(String apiKey) async {
-    WidgetConfiguration? widgetConfiguration;
 
-    Line? line;
+    CounterModel counterModel = CounterModel();
 
-    widgetConfiguration = await UserWebServiceImpl().getWidgetConfiguration(token: apiKey);
+    if (GetIt.I.isRegistered<CounterModel>()) {
+      GetIt.I.unregister<CounterModel>();
+      GetIt.I.registerLazySingleton<CounterModel>(() => counterModel);
+    } else {
+      GetIt.I.registerLazySingleton<CounterModel>(() => counterModel);
+    }
 
-    //
+    WidgetConfiguration? widgetConfiguration = await UserWebServiceImpl().getWidgetConfiguration(token: apiKey);
+
+    if (GetIt.I.isRegistered<WidgetConfiguration>()) {
+      GetIt.I.unregister<WidgetConfiguration>();
+      GetIt.I.registerLazySingleton<WidgetConfiguration>(() => widgetConfiguration);
+    } else {
+      GetIt.I.registerLazySingleton<WidgetConfiguration>(() => widgetConfiguration);
+    }
+
+
     KeyPair keyPair1 = await RSA.generate(2048);
 
     Geofencing geofencing = Geofencing(public_key: keyPair1.publicKey);
 
-    print(keyPair1.publicKey);
-    print(keyPair1.privateKey);
+    Line line = await UserWebServiceImpl().getReceiverLineDetail(geofencing: geofencing, token: apiKey);
 
-    line = await UserWebServiceImpl().getReceiverLineDetail(geofencing: geofencing, token: apiKey);
+    if (GetIt.I.isRegistered<Line>()) {
+      GetIt.I.unregister<Line>();
+      GetIt.I.registerLazySingleton<Line>(() => line);
+    } else {
+      GetIt.I.registerLazySingleton<Line>(() => line);
+    }
 
     line.password = await RSA.decryptOAEP(
       line.password!,
@@ -55,8 +80,7 @@ class MySdk {
       keyPair1.privateKey,
     );
 
-    line.init();
-    line.connect();
+    Get.put(CallsViewModel());
 
   }
 }

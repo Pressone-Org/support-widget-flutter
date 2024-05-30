@@ -23,8 +23,7 @@ class UserWebServiceImpl extends UserWebService {
       print(body);
       var response = await _networkAPICall
           .postHttp(getReceiverLine, jsonEncode(body), header: {
-      HttpHeaders.authorizationHeader:
-      'Pressone-X-Pub-Key: $token',
+      "Pressone-X-Pub-Key": "$token",
         HttpHeaders.contentTypeHeader: "application/json"
       });
 
@@ -42,15 +41,8 @@ class UserWebServiceImpl extends UserWebService {
     try {
       var response = await _networkAPICall
           .getHttp(getWidgetConfigurationEndpoint, header: {
-      HttpHeaders.authorizationHeader:
-      'Pressone-X-Pub-Key: $token',
+      "Pressone-X-Pub-Key": "$token",
       "Pressone-Platform": Platform.isIOS ? "ios" : "android"
-      });
-
-      print({
-        HttpHeaders.authorizationHeader:
-        'Pressone-X-Pub-Key: $token',
-        "Pressone-Platform": Platform.isIOS ? "ios" : "android"
       });
 
       print(token);

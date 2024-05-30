@@ -20,16 +20,18 @@ class NetworkAPICall {
     ),
   );
 
+  static const String baseUrl = "https://pressone-test-f517bea9-65cd6f502e86.herokuapp.com/api/addons/";
+
   // static const String BASE_URL = AppConfig.baseURL;
 
   Future<dynamic> postHttp(String url, dynamic body,
       {Map<String, String>? header}) async {
     final client = http.Client();
     try {
-      final String fullURL = "https://pressone-test-252281de-ddc2cd5e9c01.herokuapp.com/api/" + url;
-      print(fullURL);
+      final String fullUrl = baseUrl + url;
+      print(fullUrl);
       final response =
-          await client.post(Uri.parse(fullURL), body: body, headers: header);
+          await client.post(Uri.parse(fullUrl), body: body, headers: header);
       return checkResponse(response);
     } catch (e) {
       client.close();
@@ -41,9 +43,9 @@ class NetworkAPICall {
       {Map<String, String>? header}) async {
     final client = http.Client();
     try {
-      final String fullURL = "https://api.pressone.co/" + url;
+      final String fullUrl = baseUrl + url;
       final response = await client.patch(
-        Uri.parse(fullURL),
+        Uri.parse(fullUrl),
         body: body,
         headers: header,
         encoding: Encoding.getByName("utf-8"),
@@ -61,50 +63,14 @@ class NetworkAPICall {
       {Map<String, String>? header, bool isToken = true}) async {
     final client = http.Client();
     try {
-      final String fullURL = "https://pressone-test-252281de-ddc2cd5e9c01.herokuapp.com/api/" + url;
-      print(fullURL);
+      final String fullUrl = baseUrl + url;
+      print(fullUrl);
       final response = await client.get(
-        Uri.parse(fullURL),
+        Uri.parse(fullUrl),
         headers: header,
       );
       print("response: $response");
 
-      return checkResponse(response);
-    } catch (e) {
-      client.close();
-      rethrow;
-    }
-  }
-
-  Future<dynamic> deleteHttp(String url,
-      {required Map<String, String> header, bool isToken = true}) async {
-    final client = http.Client();
-    try {
-      final String fullURL = "https://api.pressone.co/" + url;
-
-      var request = http.Request('DELETE', Uri.parse(fullURL));
-
-      request.headers.addAll(header);
-
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 400) {
-        throw ("Something is wrong");
-      } else {
-        return await response.stream.bytesToString();
-      }
-    } catch (e) {
-      client.close();
-      rethrow;
-    }
-  }
-
-  Future<dynamic> postExternal(String url, dynamic body,
-      {Map<String, String>? header}) async {
-    final client = http.Client();
-    try {
-      final response =
-      await client.post(Uri.parse(url), body: body, headers: header);
       return checkResponse(response);
     } catch (e) {
       client.close();

@@ -1,8 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
+import 'package:live_call_widget_flutter/models/counter_model.dart';
 import 'package:live_call_widget_flutter/models/line.dart';
+import 'package:live_call_widget_flutter/models/value_listener.dart';
+import 'package:live_call_widget_flutter/models/widget_configuration.dart';
+import 'package:live_call_widget_flutter/viewmodel/calls_viewmodel.dart';
+import 'package:lottie/lottie.dart';
 
 class EnterYourNumber extends StatefulWidget {
   final PageController pageController;
@@ -15,7 +23,32 @@ class EnterYourNumber extends StatefulWidget {
 
 class _EnterYourNumberState extends State<EnterYourNumber> {
   final TextEditingController _phoneNumberController = TextEditingController();
-  Line? line;
+
+  final widgetConfiguration = GetIt.I.get<WidgetConfiguration>();
+
+  CallsViewModel callsViewModel = Get.find();
+
+  final counterModel = GetIt.I.get<CounterModel>();
+
+  ValueListener valueListener = ValueListener();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // Attach a listener to the counter model
+    counterModel.addListener(() {
+      valueListener.onCounterChanged(counterModel.counter);
+    });
+  }
+
+  @override
+  void dispose() {
+    counterModel.removeListener(() {});
+    _phoneNumberController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +56,7 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
         height: MediaQuery.of(context).size.height * 0.85,
         child: Stack(
           children: [
+
             Positioned(
               top: -60,
               left: 20,
@@ -47,79 +81,9 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                     ),
                   ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 74.40,
-                      height: 74.40,
-                      padding: const EdgeInsets.only(
-                        top: 8.57,
-                        left: 8,
-                        right: 7.88,
-                        bottom: 7.31,
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      decoration: ShapeDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment(0.58, -0.81),
-                          end: Alignment(-0.58, 0.81),
-                          colors: [Colors.white.withOpacity(0.25), Colors.white.withOpacity(0.07999999821186066)],
-                        ),
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            width: 2.07,
-                            color: Colors.white.withOpacity(0.20000000298023224),
-                          ),
-                          borderRadius: BorderRadius.circular(201.69),
-                        ),
-                        shadows: [
-                          BoxShadow(
-                            color: Color(0x3F1B4DFF),
-                            blurRadius: 40.30,
-                            offset: Offset(0, 6.05),
-                            spreadRadius: -15.50,
-                          )
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: double.infinity,
-                              padding: const EdgeInsets.only(
-                                top: 14.63,
-                                left: 18.29,
-                                right: 18.16,
-                                bottom: 13.65,
-                              ),
-                              clipBehavior: Clip.antiAlias,
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(width: 0.67, color: Color(0xFFE4E7EC)),
-                                  borderRadius: BorderRadius.circular(212.80),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: SvgPicture.network(widgetConfiguration.logo!, width: 40, height: 40,),
                 ),
               ),
             ),
@@ -128,13 +92,22 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    // Assets.svg.closeBtn.svg(),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 17, top: 17),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: SvgPicture.network(
+                              "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/close.svg")),
+                    ],
+                  ),
                 ),
+
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -191,11 +164,18 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
 
                               ElevatedButton(
                                 onPressed: () {
-                                  widget.pageController.nextPage(
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                  // print("Name entered: ${_nameController.text}");
+
+                                  callsViewModel.callNumber("02017003023");
+
+                                  if(callsViewModel.showNewCall.value){
+                                    print("Over here");
+                                    // widget.pageController.nextPage(
+                                    //   duration: Duration(milliseconds: 300),
+                                    //   curve: Curves.easeInOut,
+                                    // );
+                                    // counterModel.decrement();
+                                  }
+
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all<Color>(
@@ -221,44 +201,35 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                 const SizedBox(
                   height: 25,
                 ),
-                // Assets.svg.callButton.svg(),
 
-                const Padding(
+
+                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     children: [
-                      Icon(CupertinoIcons.refresh_circled, color: Color(0xFF00AEEF)),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Ringing.',
-                        style: TextStyle(
-                          color: Color(0xFF667185),
-                          fontSize: 16,
-                          fontFamily: FontFamily.avertaDemoPECuttedDemo,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                      Lottie.network(
+                          'https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/Ringing.json'),
                     ],
                   ),
                 ),
                 const Spacer(),
+
                 const SizedBox(
                   height: 18,
                 ),
-                // Assets.svg.poweredPressone.svg(),
+
+                SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/powered_by_pressone.svg",),
+
                 const SizedBox(
                   height: 24,
                 ),
+
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 10,
                   clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF1571D8),
-                  ),
-                ),
+                  decoration: BoxDecoration(color: Color(int.parse(widgetConfiguration!.primaryBgColor!.replaceAll('#', '0xFF')))),
+                )
               ],
             ),
           ],
@@ -266,9 +237,4 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
     );
   }
 
-  @override
-  void dispose() {
-    _phoneNumberController.dispose();
-    super.dispose();
-  }
 }

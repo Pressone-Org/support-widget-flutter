@@ -1,3 +1,3 @@
 
-String getWidgetConfigurationEndpoint = "addons/live-widget/setting/";
-String getReceiverLine = "widget/support/receiver-line/";
+String getWidgetConfigurationEndpoint = "live-widget/setting/";
+String getReceiverLine = "live-widget/support/receiver-line/";

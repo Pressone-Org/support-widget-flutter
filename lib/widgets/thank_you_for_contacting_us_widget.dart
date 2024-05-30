@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
+import 'package:live_call_widget_flutter/models/widget_configuration.dart';
 
 class ThankYouForContactingUs extends StatelessWidget {
   final PageController pageController;
 
-  const ThankYouForContactingUs({super.key, required this.pageController});
+   ThankYouForContactingUs({super.key, required this.pageController});
+
+  final widgetConfiguration = GetIt.I.get<WidgetConfiguration>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,79 +39,9 @@ class ThankYouForContactingUs extends StatelessWidget {
                   ),
                 ),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 74.40,
-                    height: 74.40,
-                    padding: const EdgeInsets.only(
-                      top: 8.57,
-                      left: 8,
-                      right: 7.88,
-                      bottom: 7.31,
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    decoration: ShapeDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment(0.58, -0.81),
-                        end: Alignment(-0.58, 0.81),
-                        colors: [Colors.white.withOpacity(0.25), Colors.white.withOpacity(0.07999999821186066)],
-                      ),
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 2.07,
-                          color: Colors.white.withOpacity(0.20000000298023224),
-                        ),
-                        borderRadius: BorderRadius.circular(201.69),
-                      ),
-                      shadows: [
-                        BoxShadow(
-                          color: Color(0x3F1B4DFF),
-                          blurRadius: 40.30,
-                          offset: Offset(0, 6.05),
-                          spreadRadius: -15.50,
-                        )
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            height: double.infinity,
-                            padding: const EdgeInsets.only(
-                              top: 14.63,
-                              left: 18.29,
-                              right: 18.16,
-                              bottom: 13.65,
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            decoration: ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(width: 0.67, color: Color(0xFFE4E7EC)),
-                                borderRadius: BorderRadius.circular(212.80),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: SvgPicture.network(widgetConfiguration.logo!, width: 40, height: 40,),
               ),
             ),
           ),
@@ -179,10 +114,14 @@ class ThankYouForContactingUs extends StatelessWidget {
                             ),
                             backgroundColor: Colors.blue,
                           ),
-                          child: Text(
+                          child:Text(
                             'Continue',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
+                              color: Colors.white,
                               fontSize: 16,
+                              fontFamily: FontFamily.avertaDemoPECuttedDemo,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -192,11 +131,12 @@ class ThankYouForContactingUs extends StatelessWidget {
                 ),
               ),
               Spacer(),
+
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 10,
                 clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(color: Color(0xFF1571D8)),
+                decoration: BoxDecoration(color: Color(int.parse(widgetConfiguration!.primaryBgColor!.replaceAll('#', '0xFF')))),
               )
             ],
           ),

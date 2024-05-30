@@ -1,25 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
+import 'package:live_call_widget_flutter/models/counter_model.dart';
+import 'package:live_call_widget_flutter/models/line.dart';
+import 'package:live_call_widget_flutter/models/value_listener.dart';
+import 'package:live_call_widget_flutter/models/widget_configuration.dart';
+import 'package:live_call_widget_flutter/viewmodel/calls_viewmodel.dart';
 import 'package:lottie/lottie.dart';
 
 class ClickAwayFromAssistance extends StatefulWidget {
-
   final PageController pageController;
 
   const ClickAwayFromAssistance({super.key, required this.pageController});
 
   @override
-  State<ClickAwayFromAssistance> createState() => _ClickAwayFromAssistanceState();
+  State<ClickAwayFromAssistance> createState() =>
+      _ClickAwayFromAssistanceState();
 }
 
 class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
+
+  final widgetConfiguration = GetIt.I.get<WidgetConfiguration>();
+
+  final line = GetIt.I.get<Line>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    CallsViewModel callsViewModel = Get.find();
+    callsViewModel.initialiseLines(line);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       child: Stack(
         children: [
-
           Positioned(
             top: -60,
             left: 20,
@@ -44,79 +64,9 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                   ),
                 ),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 74.40,
-                    height: 74.40,
-                    padding: const EdgeInsets.only(
-                      top: 8.57,
-                      left: 8,
-                      right: 7.88,
-                      bottom: 7.31,
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    decoration: ShapeDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment(0.58, -0.81),
-                        end: Alignment(-0.58, 0.81),
-                        colors: [Colors.white.withOpacity(0.25), Colors.white.withOpacity(0.07999999821186066)],
-                      ),
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 2.07,
-                          color: Colors.white.withOpacity(0.20000000298023224),
-                        ),
-                        borderRadius: BorderRadius.circular(201.69),
-                      ),
-                      shadows: [
-                        BoxShadow(
-                          color: Color(0x3F1B4DFF),
-                          blurRadius: 40.30,
-                          offset: Offset(0, 6.05),
-                          spreadRadius: -15.50,
-                        )
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            height: double.infinity,
-                            padding: const EdgeInsets.only(
-                              top: 14.63,
-                              left: 18.29,
-                              right: 18.16,
-                              bottom: 13.65,
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            decoration: ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(width: 0.67, color: Color(0xFFE4E7EC)),
-                                borderRadius: BorderRadius.circular(212.80),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: SvgPicture.network(widgetConfiguration.logo!, width: 40, height: 40,),
               ),
             ),
           ),
@@ -125,6 +75,21 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 17, top: 17),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: SvgPicture.network(
+                            "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/close.svg")),
+                  ],
+                ),
+              ),
 
               Spacer(),
 
@@ -132,6 +97,7 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                 padding: EdgeInsets.symmetric(horizontal: 47),
                 child: Column(
                   children: [
+
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 18),
                       child: Text(
@@ -166,7 +132,7 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                     ),
 
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         widget.pageController.nextPage(
                           duration: Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
@@ -203,30 +169,10 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                             )
                           ],
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 40,
-                              height: 40,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(width: 40, height: 40, ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/phone_call.svg",)
                       ),
                     ),
                     // Assets.svg.callButton.svg(),
-
-
                   ],
                 ),
               ),
@@ -235,7 +181,8 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
 
               Text.rich(
                 TextSpan(
-                  text: 'By dialling, you consent to Prime Pay collecting, processing, and storing my information in accordance with our ',
+                  text:
+                      'By dialling, you consent to Prime Pay collecting, processing, and storing my information in accordance with our ',
                   style: TextStyle(
                     color: Color(0xFF667185),
                     fontSize: 12,
@@ -261,14 +208,7 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                 height: 18,
               ),
 
-              // Image(image: AssetImage("assets/svg/p.png", package: "live_call_widget_flutter")),
-
-              Lottie.network(
-                  'https://gitlab.com/pressone-apps/Live-Call-Widget-Flutter/main/lib/assets/json/connecting.json'),
-
-              // Image.network("https://images.twinkl.co.uk/tw1n/image/private/t_630/u/ux/chafinch-flying-flight-bird-animal-ks1_ver_1.png"),
-
-              // Assets.svg.poweredPressone.svg(),
+              SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/powered_by_pressone.svg",),
 
               SizedBox(
                 height: 24,
@@ -278,7 +218,7 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                 width: MediaQuery.of(context).size.width,
                 height: 10,
                 clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(color: Color(0xFF1571D8)),
+                decoration: BoxDecoration(color: Color(int.parse(widgetConfiguration!.primaryBgColor!.replaceAll('#', '0xFF')))),
               )
             ],
           )

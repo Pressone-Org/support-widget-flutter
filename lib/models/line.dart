@@ -1,7 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:live_call_widget_flutter/helper/logger.dart';
+import 'package:live_call_widget_flutter/models/counter_model.dart';
+import 'package:live_call_widget_flutter/viewmodel/call_notifier.dart';
+import 'package:live_call_widget_flutter/viewmodel/calls_viewmodel.dart';
 import 'package:sip_ua/sip_ua.dart';
+
+import 'base_model.dart';
 
 
 class Line with SipUaHelperListener {
@@ -18,12 +24,17 @@ class Line with SipUaHelperListener {
 
   String? domain;
 
+  int? extension;
+
   late RegistrationState _state;
+  late CallNotifier _notifier; // reference to view_model.
   late SIPUAHelper? _helper;
 
   final mediaConstraints = <String, dynamic>{'audio': true, 'video': false};
   MediaStream? _localStream;
   MediaStream? _remoteStream;
+
+  final counterModel = GetIt.I.get<CounterModel>();
 
   Line({
     this.username,
@@ -32,6 +43,7 @@ class Line with SipUaHelperListener {
     this.host,
     this.port,
     this.protocol,
+    this.extension,
   });
 
   String getUserAgent() {
@@ -40,14 +52,6 @@ class Line with SipUaHelperListener {
 
   String? getPassword() {
     return password;
-    // if (this.nonce == null) return this.password;
-    // String secret = "2F8D89B734DBADE00D31FA21D400143E";
-    // final encrypter = Encrypt.Encrypter(Encrypt.AES(
-    //     Encrypt.Key.fromUtf8(secret),
-    //     mode: Encrypt.AESMode.ctr,
-    //     padding: null));
-    // return encrypter.decrypt(Encrypt.Encrypted.fromBase64("x/os0qf9IcxUUIKcVW4msOyXRTo="),
-    //     iv: Encrypt.IV.fromBase64("DWUJw7+tgfo="));
   }
 
   String? getUsername() {
@@ -55,7 +59,6 @@ class Line with SipUaHelperListener {
   }
 
   String? getDomain() {
-    // Domain is the Wazo Tenant
     return domain;
   }
 
@@ -83,8 +86,9 @@ class Line with SipUaHelperListener {
     return DtmfMode.RFC2833;
   }
 
-  Line init() {
+  Line init(CallNotifier notifier) {
     _helper = SIPUAHelper();
+    _notifier = notifier;
     _state = _helper!.registerState;
     _helper!.addSipUaHelperListener(this);
     logger.w("New line is initialized");
@@ -102,11 +106,6 @@ class Line with SipUaHelperListener {
     // }
 
     try {
-      // String? token = _notifier.getFCMToken();
-      // if (token == null || token.isEmpty == true) {
-      //   logger.e("Your token is empty");
-      //   throw Exception("Your token is empty");
-      // }
       UaSettings settings = UaSettings();
       /*
 
@@ -165,12 +164,13 @@ class Line with SipUaHelperListener {
     try {
       mediaStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
     }
-    catch(e) {
+    catch (e) {
 
     }
     _helper!
-        .call(phoneNumber, voiceonly: true, mediaStream: mediaStream ?? null).then((bool success) {
-      if(!success){
+        .call(phoneNumber, voiceonly: true, mediaStream: mediaStream ?? null)
+        .then((bool success) {
+      if (!success) {
         // AppSnackBar.showErrorSnackBar(message: 'Not connected, you will need to register. Please try again.', title: "Error");
       }
     });
@@ -199,7 +199,10 @@ class Line with SipUaHelperListener {
     MediaStream? stream = event.stream;
     if (event.originator == 'local') {
       if (!kIsWeb && !WebRTC.platformIsDesktop) {
-        event.stream?.getAudioTracks().first.enableSpeakerphone(false);
+        event.stream
+            ?.getAudioTracks()
+            .first
+            .enableSpeakerphone(false);
       }
       _localStream = stream;
     }
@@ -228,52 +231,71 @@ class Line with SipUaHelperListener {
   @override
   void callStateChanged(Call call, CallState _callState) {
     if (_callState.state == CallStateEnum.CALL_INITIATION) {
-      // _notifier.newCall(call, this);
+      _notifier.newCall(call, this);
+      // counterModel.increment();
     }
+
     if (_callState.state == CallStateEnum.STREAM ||
         _callState.state.name == "STREAM") {
       _handleStreams(call, _callState);
       logger.i(
-          'Streaming Streaming. Connection State: ${EnumHelper.getName(_state.state)} | Name - ${(_state.state!.name)} |  Caused by ${_callState.cause}');
+          'Streaming Streaming. Connection State: ${EnumHelper.getName(
+              _state.state)} | Name - ${(_state.state!
+              .name)} |  Caused by ${_callState.cause}');
     }
 
     if (_callState.state == CallStateEnum.HOLD ||
         _callState.state == CallStateEnum.UNHOLD) {
-      // _notifier.setHold(_callState.state == CallStateEnum.HOLD);
+      _notifier.setHold(_callState.state == CallStateEnum.HOLD);
       logger.i(
-          'Hold Hold. Hold State: ${_callState.state == CallStateEnum.HOLD} State: ${EnumHelper.getName(_state.state)} | Name - ${(_state.state!.name)} |  Caused by ${_callState.cause}');
+          'Hold Hold. Hold State: ${_callState.state ==
+              CallStateEnum.HOLD} State: ${EnumHelper.getName(
+              _state.state)} | Name - ${(_state.state!
+              .name)} |  Caused by ${_callState.cause}');
     }
+
     if (_callState.state == CallStateEnum.ACCEPTED) {
-      // _notifier.callAccepted(call, this);
-      // _notifier.stopRinging();
+      _notifier.callAccepted(call, this);
+      _notifier.stopRinging();
       logger.i(
-          'Accepted Accepted. Connection State: ${EnumHelper.getName(_state.state)} | Name - ${(_state.state!.name)} |  Caused by ${_callState.cause}');
+          'Accepted Accepted. Connection State: ${EnumHelper.getName(
+              _state.state)} | Name - ${(_state.state!
+              .name)} |  Caused by ${_callState.cause}');
     }
+
     if (_callState.state == CallStateEnum.CONFIRMED) {
-      // _notifier.stopRinging();
+      _notifier.stopRinging();
       //_handleStreams(call, state);
       logger.i(
-          'Confirmed Confirmed. Connection State: ${EnumHelper.getName(_state.state)} | Name - ${(_state.state!.name)} |  Caused by ${_callState.cause}');
+          'Confirmed Confirmed. Connection State: ${EnumHelper.getName(
+              _state.state)} | Name - ${(_state.state!
+              .name)} |  Caused by ${_callState.cause}');
     }
+
     if (_callState.state == CallStateEnum.PROGRESS) {
       logger.i(
-          'Progress Progress. Connection State: ${EnumHelper.getName(_state.state)} | Name - ${(_state.state!.name)} |  Caused by ${_callState.cause}');
+          'Progress Progress. Connection State: ${EnumHelper.getName(
+              _state.state)} | Name - ${(_state.state!
+              .name)} |  Caused by ${_callState.cause}');
     }
+
     if (_callState.state == CallStateEnum.REFER) {}
     if (_callState.state == CallStateEnum.FAILED ||
         _callState.state.name == "FAILED") {
       logger.i(
-          'Failed Failed. Connection State: ${EnumHelper.getName(_state.state)} | Name - ${(_state.state!.name)} |  Caused by ${_callState.cause}');
+          'Failed Failed. Connection State: ${EnumHelper.getName(
+              _state.state)} | Name - ${(_state.state!
+              .name)} |  Caused by ${_callState.cause}');
 
-      if([408].contains(_callState.cause!.status_code)){
+      if ([408].contains(_callState.cause!.status_code)) {
 
-      }else if([487].contains(_callState.cause!.status_code)){
+      } else if ([487].contains(_callState.cause!.status_code)) {
 
-      }else if([480].contains(_callState.cause!.status_code)){
+      } else if ([480].contains(_callState.cause!.status_code)) {
 
-      }else if([486].contains(_callState.cause!.status_code)){
+      } else if ([486].contains(_callState.cause!.status_code)) {
 
-      }else{
+      } else {
 
       }
 
@@ -286,13 +308,18 @@ class Line with SipUaHelperListener {
     if (_callState.state == CallStateEnum.ENDED ||
         _callState.state.name == "ENDED") {
       logger.i(
-          'Ended Ended. Connection State: ${EnumHelper.getName(_state.state)} | Name - ${(_state.state!.name)} |  Caused by ${_callState.cause}');
+          'Ended Ended. Connection State: ${EnumHelper.getName(
+              _state.state)} | Name - ${(_state.state!
+              .name)} |  Caused by ${_callState.cause}');
       _closeStream();
-      // _notifier.callEnded(call, this);
-      // _notifier.stopRinging();
+      _notifier.callEnded(call, this);
+      _notifier.stopRinging();
+      counterModel.changeEnd();
     }
     logger.i(
-        'Line ${username} Connection State:${EnumHelper.getName(_state.state)} . Caused by ${_callState.cause} with pressone number');
+        'Line ${username} Connection State:${EnumHelper.getName(
+            _state.state)} . Caused by ${_callState
+            .cause} with pressone number');
   }
 
   @override
@@ -305,35 +332,53 @@ class Line with SipUaHelperListener {
     _state = state;
     // viewModel.disconnected.value =true;
     logger.i(
-        'Registration State changed for Line ${username}. State: ${EnumHelper.getName(_state.state)}. Caused by ${state.cause} with pressone number');
+        'Registration State changed for Line ${username}. State: ${EnumHelper
+            .getName(_state.state)}. Caused by ${state
+            .cause} with pressone number');
   }
 
   @override
   void transportStateChanged(TransportState state) {
-
     logger.i(
-        'Transport State changed for Line  ${username}. State: ${EnumHelper.getName(_state.state)}. Caused by ${state.cause} with pressone number');
+        'Transport State changed for Line  ${username}. State: ${EnumHelper
+            .getName(_state.state)}. Caused by ${state
+            .cause} with pressone number');
   }
 
   bool isRegistered() {
-    if(_state == null)
+    if (_state == null)
       return false;
-    if (_state.state == RegistrationStateEnum.REGISTERED || _state.state == RegistrationStateEnum.NONE) return true;
+    if (_state.state == RegistrationStateEnum.REGISTERED ||
+        _state.state == RegistrationStateEnum.NONE) return true;
     return false;
   }
 
-  factory Line.fromJson(Map<String, dynamic> json) => Line(
+  factory Line.fromJson(Map<String, dynamic> json) =>
+      Line(
         username: json['username'],
+        extension: json['extension'],
         password: json['password'],
         domain: json['domain'],
         host: json['host'],
-        port: int.tryParse(json['port']),
+        port: json['port'],
         protocol: json['protocol'],
       );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "username": username,
+        "password": password,
+        "domain": domain,
+        "host": host,
+        "port": port,
+        "protocol": protocol,
+        "extension": extension
+      };
 
   @override
   void onNewNotify(Notify ntf) {
     // TODO: implement onNewNotify
     logger.w("New notify");
   }
+
 }
