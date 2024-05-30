@@ -39,7 +39,7 @@ LiveCallWidget.showWidget(context);
 
 ```
 This is a link to an example application that integrated the sdk successfully:
-- https://github.com/D-Mick/TestPressOneSDK/blob/main/lib/main.dart
+- https://github.com/D-Mick/TestLiveCallWidgetPressOne/blob/main/lib/main.dart
 ```
 
 
