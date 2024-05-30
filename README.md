@@ -29,7 +29,7 @@ Place the following code in the main file of your application or at the point yo
 await LiveCallWidget.setAPIKEY("pk_34XsEi033ocVbA5Zm0X9YnvlSaqDg");
 ```
 
-Step 5: Show the Widget
+Step 5: Show the Widget:\
 Place the following code at the point where you want the user to interact or make the call
 ```
 LiveCallWidget.showWidget(context);
