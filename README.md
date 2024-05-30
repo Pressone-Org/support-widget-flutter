@@ -1,39 +1,45 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+### How to integrate the sdk
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+Step 1: Copy the API Token
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+```
+Copy the API token from the manager dashboard
+````
+   
+Step 2: Add the library: 
+Add the library to the pubspec.yaml file
+```
+ live_call_widget_flutter:
+    git:
+      url: https://gitlab.com/pressone-apps/Live-Call-Widget-Flutter
+```      
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-const like = 'sample';
+Step 3: Add the Initialization Function:
+Add the following code to the manifest file in the android folder
+```
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 ```
 
-## Additional information
+Step 4: Add the Initialization Function:
+Place the following code in the main file of your application or at the point you want to fetch other important details in your application. This code includes a <String> argument that will contain your unique API token.
+```
+await LiveCallWidget.setAPIKEY("pk_34XsEi033ocVbA5Zm0X9YnvlSaqDg");
+```
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+Step 5: Show the Widget
+Place the following code at the point where you want the user to interact or make the call
+```
+LiveCallWidget.showWidget(context);
+```
+
+### For more examples on [integration](https://github.com/D-Mick/TestLiveCallWidgetPressOne/blob/main/lib/main.dart)
+
+```
+This is a link to an example application that integrated the sdk successfully:
+- https://github.com/D-Mick/TestPressOneSDK/blob/main/lib/main.dart
+```
+
+
