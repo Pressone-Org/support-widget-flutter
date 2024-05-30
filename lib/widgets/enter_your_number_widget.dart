@@ -165,15 +165,15 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                               ElevatedButton(
                                 onPressed: () {
 
-                                  callsViewModel.callNumber("02017003023");
+                                  callsViewModel.callNumber(widgetConfiguration.businessNumbers ?? "02017003023");
 
                                   if(callsViewModel.showNewCall.value){
-                                    print("Over here");
-                                    // widget.pageController.nextPage(
-                                    //   duration: Duration(milliseconds: 300),
-                                    //   curve: Curves.easeInOut,
-                                    // );
-                                    // counterModel.decrement();
+
+                                    widget.pageController.nextPage(
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeInOut,
+                                    );
+
                                   }
 
                                 },
