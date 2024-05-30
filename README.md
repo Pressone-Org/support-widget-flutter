@@ -6,7 +6,7 @@ Step 1: Copy the API Token
 Copy the API token from the manager dashboard
 ````
    
-Step 2: Add the library: 
+Step 2: Add the library:\ 
 Add the library to the pubspec.yaml file
 ```
  live_call_widget_flutter:
@@ -14,7 +14,7 @@ Add the library to the pubspec.yaml file
       url: https://gitlab.com/pressone-apps/Live-Call-Widget-Flutter
 ```      
 
-Step 3: Add the Initialization Function:
+Step 3: Add the Initialization Function:\
 Add the following code to the manifest file in the android folder
 ```
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -23,7 +23,7 @@ Add the following code to the manifest file in the android folder
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 ```
 
-Step 4: Add the Initialization Function:
+Step 4: Add the Initialization Function:\
 Place the following code in the main file of your application or at the point you want to fetch other important details in your application. This code includes a <String> argument that will contain your unique API token.
 ```
 await LiveCallWidget.setAPIKEY("pk_34XsEi033ocVbA5Zm0X9YnvlSaqDg");
