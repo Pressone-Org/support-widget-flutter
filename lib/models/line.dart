@@ -34,8 +34,6 @@ class Line with SipUaHelperListener {
   MediaStream? _localStream;
   MediaStream? _remoteStream;
 
-  final counterModel = GetIt.I.get<CounterModel>();
-
   Line({
     this.username,
     this.password,
@@ -314,7 +312,6 @@ class Line with SipUaHelperListener {
       _closeStream();
       _notifier.callEnded(call, this);
       _notifier.stopRinging();
-      counterModel.changeEnd();
     }
     logger.i(
         'Line ${username} Connection State:${EnumHelper.getName(

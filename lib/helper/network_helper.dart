@@ -20,7 +20,7 @@ class NetworkAPICall {
     ),
   );
 
-  static const String baseUrl = "https://pressone-test-f517bea9-65cd6f502e86.herokuapp.com/api/addons/";
+  static const String baseUrl = "https://pressone-test-f517bea9-65cd6f502e86.herokuapp.com/api/";
 
   // static const String BASE_URL = AppConfig.baseURL;
 

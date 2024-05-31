@@ -41,15 +41,6 @@ class LiveCallWidget {
 
   static setAPIKEY(String apiKey) async {
 
-    CounterModel counterModel = CounterModel();
-
-    if (GetIt.I.isRegistered<CounterModel>()) {
-      GetIt.I.unregister<CounterModel>();
-      GetIt.I.registerLazySingleton<CounterModel>(() => counterModel);
-    } else {
-      GetIt.I.registerLazySingleton<CounterModel>(() => counterModel);
-    }
-
     WidgetConfiguration? widgetConfiguration = await UserWebServiceImpl().getWidgetConfiguration(token: apiKey);
 
     if (GetIt.I.isRegistered<WidgetConfiguration>()) {
@@ -81,6 +72,10 @@ class LiveCallWidget {
     );
 
     Get.put(CallsViewModel());
+
+  }
+
+  static setSecretKey(String secretKey) async{
 
   }
 }
