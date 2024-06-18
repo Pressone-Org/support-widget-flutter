@@ -4,12 +4,27 @@ import 'package:get_it/get_it.dart';
 import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
 import 'package:live_call_widget_flutter/models/widget_configuration.dart';
 
-class WeValueYourFeedback extends StatelessWidget {
+class WeValueYourFeedback extends StatefulWidget {
   final PageController pageController;
 
   WeValueYourFeedback({super.key, required this.pageController});
 
+  @override
+  State<WeValueYourFeedback> createState() => _WeValueYourFeedbackState();
+}
+
+class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
   final widgetConfiguration = GetIt.I.get<WidgetConfiguration>();
+
+  bool selectedEmojiOne = true;
+
+  bool selectedEmojiTwo = false;
+
+  bool selectedEmojiThree = false;
+
+  bool selectedEmojiFour = false;
+
+  bool selectedEmojiFive = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +56,14 @@ class WeValueYourFeedback extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.only(left: 10),
-              child: SvgPicture.network(widgetConfiguration.logo!, width: 40, height: 40,),
+              child: SvgPicture.network(
+                widgetConfiguration.logo!,
+                width: 40,
+                height: 40,
+              ),
             ),
           ),
         ),
-
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,24 +130,75 @@ class WeValueYourFeedback extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("emoji 1"),
-                      SizedBox(
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectedEmojiOne = true;
+                              selectedEmojiTwo = false;
+                              selectedEmojiThree = false;
+                              selectedEmojiFour = false;
+                              selectedEmojiFive = false;
+                            });
+                          },
+                          child: Text(selectedEmojiOne ? "😍" : "Inactive",
+                          style: TextStyle(color: Colors.red),)),
+                      const SizedBox(
                         width: 9,
                       ),
-                      Text("emoji 2"),
-                      SizedBox(
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectedEmojiOne = false;
+                              selectedEmojiTwo = true;
+                              selectedEmojiThree = false;
+                              selectedEmojiFour = false;
+                              selectedEmojiFive = false;
+                            });
+                          },
+                          child: Text(selectedEmojiTwo ? "🙂" : "Inactive")),
+                      const SizedBox(
                         width: 9,
                       ),
-                      Text("emoji 3"),
-                      SizedBox(
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectedEmojiOne = false;
+                              selectedEmojiTwo = false;
+                              selectedEmojiThree = true;
+                              selectedEmojiFour = false;
+                              selectedEmojiFive = false;
+                            });
+                          },
+                          child: Text(selectedEmojiThree ? "😐" : "Inactive")),
+                      const SizedBox(
                         width: 9,
                       ),
-                      Text("emoji 4"),
-                      SizedBox(
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectedEmojiOne = false;
+                              selectedEmojiTwo = false;
+                              selectedEmojiThree = false;
+                              selectedEmojiFour = true;
+                              selectedEmojiFive = false;
+                            });
+                          },
+                          child: Text(selectedEmojiFour ? "🙁" : "Inactive")),
+                      const SizedBox(
                         width: 9,
                       ),
-                      Text("emoji 5"),
-                      SizedBox(
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectedEmojiOne = false;
+                              selectedEmojiTwo = false;
+                              selectedEmojiThree = false;
+                              selectedEmojiFour = false;
+                              selectedEmojiFive = true;
+                            });
+                          },
+                          child: Text(selectedEmojiFive ? "😖" : "Inactive")),
+                      const SizedBox(
                         width: 9,
                       ),
                     ],
@@ -159,8 +228,8 @@ class WeValueYourFeedback extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: InkWell(
-                          onTap: (){
-                            pageController.previousPage(
+                          onTap: () {
+                            widget.pageController.previousPage(
                               duration: Duration(milliseconds: 300),
                               curve: Curves.easeInOut,
                             );
@@ -200,16 +269,15 @@ class WeValueYourFeedback extends StatelessWidget {
                                 SvgPicture.network(
                                   "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/back_btn.svg",
                                 ),
-
                                 const SizedBox(width: 8),
-
                                 Text(
                                   'Back',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Color(0xFF475267),
                                     fontSize: 16,
-                                    fontFamily: FontFamily.avertaDemoPECuttedDemo,
+                                    fontFamily:
+                                        FontFamily.avertaDemoPECuttedDemo,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -218,9 +286,9 @@ class WeValueYourFeedback extends StatelessWidget {
                           ),
                         ),
                       ),
-
-                      SizedBox(width: 24,),
-
+                      SizedBox(
+                        width: 24,
+                      ),
                       Expanded(
                         flex: 3,
                         child: Center(
@@ -230,7 +298,7 @@ class WeValueYourFeedback extends StatelessWidget {
                             child: ElevatedButton(
                               onPressed: () {
                                 // Handle continue button press
-                                pageController.nextPage(
+                                widget.pageController.nextPage(
                                   duration: Duration(milliseconds: 300),
                                   curve: Curves.easeInOut,
                                 );
@@ -260,26 +328,23 @@ class WeValueYourFeedback extends StatelessWidget {
                 ],
               ),
             ),
-
             Spacer(),
-
             const SizedBox(
               height: 18,
             ),
-
             SvgPicture.network(
               "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/powered_by_pressone.svg",
             ),
-
             const SizedBox(
               height: 24,
             ),
-
             Container(
               width: MediaQuery.of(context).size.width,
               height: 10,
               clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(color: Color(int.parse(widgetConfiguration!.primaryBgColor!.replaceAll('#', '0xFF')))),
+              decoration: BoxDecoration(
+                  color: Color(int.parse(widgetConfiguration!.primaryBgColor!
+                      .replaceAll('#', '0xFF')))),
             )
           ],
         )
