@@ -70,7 +70,7 @@ class _ConnectingState extends State<Connecting> with SingleTickerProviderStateM
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: SvgPicture.network(widgetConfiguration.logo!, width: 40, height: 40,),
+                  child: Image.network(widgetConfiguration.logo!, width: 40, height: 40,),
                 ),
               ),
             ),

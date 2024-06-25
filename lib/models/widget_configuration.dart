@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:live_call_widget_flutter/models/base_model.dart';
+import 'package:live_call_widget_flutter/models/business.dart';
 
 WidgetConfiguration widgetConfigurationFromJson(String str) => WidgetConfiguration.fromJson(json.decode(str));
 
@@ -30,7 +31,7 @@ class WidgetConfiguration extends BaseModel {
   String? secondaryBgColor;
   bool? isActive;
   String? webhookUrl;
-  int? business;
+  Business? business;
   int? addonSubscription;
   String? dialGroup;
   String? widgetType;
@@ -63,7 +64,7 @@ class WidgetConfiguration extends BaseModel {
 
   factory WidgetConfiguration.fromJson(Map<String, dynamic> json) => WidgetConfiguration(
     businessName: json["business_name"],
-    businessNumbers: json["business_numbers"],
+    businessNumbers: json["business_number"],
     id: json["id"],
     dateCreated: json["date_created"] == null ? null : DateTime.parse(json["date_created"]),
     logo: json["logo"],
@@ -81,7 +82,7 @@ class WidgetConfiguration extends BaseModel {
     secondaryBgColor: json["secondary_bg_color"],
     isActive: json["is_active"],
     webhookUrl: json["webhook_url"],
-    business: json["business"],
+    business: json["business"] == null ? null : Business.fromJson(json["business"]),
     addonSubscription: json["addon_subscription"],
     dialGroup: json["dial_group"],
     widgetType: json["widget_type"],
@@ -89,7 +90,7 @@ class WidgetConfiguration extends BaseModel {
 
   Map<String, dynamic> toJson() => {
     "business_name": businessName,
-    "business_numbers": businessNumbers,
+    "business_number": businessNumbers,
     "id": id,
     "date_created": dateCreated?.toIso8601String(),
     "logo": logo,
@@ -107,7 +108,7 @@ class WidgetConfiguration extends BaseModel {
     "secondary_bg_color": secondaryBgColor,
     "is_active": isActive,
     "webhook_url": webhookUrl,
-    "business": business,
+    "business": business?.toJson(),
     "addon_subscription": addonSubscription,
     "dial_group": dialGroup,
     "widget_type": widgetType,

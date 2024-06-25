@@ -28,7 +28,7 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
 
   CallsViewModel callsViewModel = Get.find();
 
-  final counterModel = GetIt.I.get<CounterModel>();
+  // final counterModel = GetIt.I.get<CounterModel>();
 
   ValueListener valueListener = ValueListener();
 
@@ -37,14 +37,14 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
     // TODO: implement initState
     super.initState();
     // Attach a listener to the counter model
-    counterModel.addListener(() {
-      valueListener.onCounterChanged(counterModel.counter);
-    });
+    // counterModel.addListener(() {
+    //   valueListener.onCounterChanged(counterModel.counter);
+    // });
   }
 
   @override
   void dispose() {
-    counterModel.removeListener(() {});
+    // counterModel.removeListener(() {});
     _phoneNumberController.dispose();
     super.dispose();
   }
@@ -83,7 +83,7 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: SvgPicture.network(widgetConfiguration.logo!, width: 40, height: 40,),
+                  child: Image.network(widgetConfiguration.logo!, width: 40, height: 40,),
                 ),
               ),
             ),
@@ -165,9 +165,11 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                               ElevatedButton(
                                 onPressed: () {
 
+                                  print("business number: ${widgetConfiguration.businessNumbers}");
                                   callsViewModel.callNumber(widgetConfiguration.businessNumbers ?? "02017003023");
 
                                   if(callsViewModel.showNewCall.value){
+                                    print("callsViewModel.showNewCall.value: ${callsViewModel.showNewCall.value}");
 
                                     widget.pageController.nextPage(
                                       duration: Duration(milliseconds: 300),
@@ -190,7 +192,8 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                                   size: 20,
                                   color: Colors.white,
                                 ),
-                              ),
+                              )
+
                             ],
                           )
                         ],

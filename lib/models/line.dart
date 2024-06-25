@@ -139,7 +139,7 @@ class Line with SipUaHelperListener {
       settings.dtmfMode = getDTMFMode();
 
       _helper?.start(settings);
-      logger.w("Connect was successful");
+      // logger.w("Connect was successful");
       logger.e("Details", {
         "webSocket": getWebSocketUrl(),
         "uri": getUri(),
@@ -229,6 +229,7 @@ class Line with SipUaHelperListener {
   @override
   void callStateChanged(Call call, CallState _callState) {
     if (_callState.state == CallStateEnum.CALL_INITIATION) {
+      print("shows call invitation");
       _notifier.newCall(call, this);
       // counterModel.increment();
     }

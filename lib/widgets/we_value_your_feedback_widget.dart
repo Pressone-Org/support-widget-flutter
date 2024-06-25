@@ -56,7 +56,7 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
             ),
             child: Padding(
               padding: const EdgeInsets.only(left: 10),
-              child: SvgPicture.network(
+              child: Image.network(
                 widgetConfiguration.logo!,
                 width: 40,
                 height: 40,

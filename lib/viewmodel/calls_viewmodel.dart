@@ -184,10 +184,8 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
     _activeCall = call;
     _activeLine = line;
     _showNewCall.value = true;
-    if(Platform.isIOS){
 
-    }
-
+    print("new call here");
 
   }
 

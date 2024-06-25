@@ -69,7 +69,7 @@ class _RingingState extends State<Ringing> with SingleTickerProviderStateMixin {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: SvgPicture.network(widgetConfiguration.logo!, width: 40, height: 40,),
+                  child: Image.network(widgetConfiguration.logo!, width: 40, height: 40,),
                 ),
               ),
             ),

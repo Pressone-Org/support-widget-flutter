@@ -90,7 +90,7 @@ class _PleaseHoldOnState extends State<PleaseHoldOn> with SingleTickerProviderSt
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: SvgPicture.network(
+                          child: Image.network(
                               "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/close.svg")),
                     ],
                   ),
