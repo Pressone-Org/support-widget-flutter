@@ -154,7 +154,6 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
       // SharedPreferences.saveCallCounts(callCount + 1);
       activeLine!.call(phoneNumber);
     }
-    activeLine!.call(phoneNumber);
   }
 
   void transferCall(String toNumber) {
@@ -203,6 +202,10 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
 
   RxBool get showNewCall {
     return _showNewCall;
+  }
+
+ void setShowNewCall() {
+   _showNewCall.value = true;
   }
 
   RxBool get acceptAuto {
@@ -275,6 +278,7 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
     _callStatusLabel.value = "Ended";
     _shouldRejectAuto.value = false;
     _shouldAcceptAuto.value = false;
+    _showNewCall.value = false;
     disableCallButton = false;
     // Also hanguo native phone system (callkeep)
     if(Platform.isIOS){

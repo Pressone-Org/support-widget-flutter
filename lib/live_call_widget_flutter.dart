@@ -142,48 +142,53 @@ class _PageViewWidgetState extends State<_PageViewWidget> {
                   )),
 
               // Screen two
-              Center(
-                  child: PleaseHoldOn(
-                    pageController: _pageController,
-                  )),
-
-              // Screen two
-              Center(
-                  child: Connecting(
-                    pageController: _pageController,
-                  )),
-
-              // Screen three
-              Center(
-                  child: ShareYourName(
-                    pageController: _pageController,
-                  )),
-
-              Center(
-                  child: Connecting(
-                    pageController: _pageController,
-                  )),
-
-              // Screen three
-              Center(
-                  child: Ringing(
-                    pageController: _pageController,
-                  )),
-
-              // Screen four
-              Center(
-                  child: ThankYouRingingOurTeam(
-                    pageController: _pageController,
-                  )),
-              // Screen four
-              Center(
-                  child: Ringing(
-                    pageController: _pageController,
-                  )),
+              // Center(
+              //     child: PleaseHoldOn(
+              //       pageController: _pageController,
+              //     )),
+              //
+              // // Screen two
+              // Center(
+              //     child: Connecting(
+              //       pageController: _pageController,
+              //     )),
+              //
+              // // Screen three
+              // Center(
+              //     child: ShareYourName(
+              //       pageController: _pageController,
+              //     )),
+              //
+              // Center(
+              //     child: Connecting(
+              //       pageController: _pageController,
+              //     )),
+              //
+              // // Screen three
+              // Center(
+              //     child: Ringing(
+              //       pageController: _pageController,
+              //     )),
+              //
+              // // Screen four
+              // Center(
+              //     child: ThankYouRingingOurTeam(
+              //       pageController: _pageController,
+              //     )),
+              // // Screen four
+              // Center(
+              //     child: Ringing(
+              //       pageController: _pageController,
+              //     )),
 
               // Screen five
               Center(
                   child: EnterYourNumber(
+                    pageController: _pageController,
+                  )),
+
+              Center(
+                  child: OngoingCall(
                     pageController: _pageController,
                   )),
 

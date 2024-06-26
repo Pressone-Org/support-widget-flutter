@@ -14,12 +14,10 @@ class OngoingCall extends StatefulWidget {
   const OngoingCall({super.key, required this.pageController});
 
   @override
-  State<OngoingCall> createState() =>
-      _OngoingCallState();
+  State<OngoingCall> createState() => _OngoingCallState();
 }
 
 class _OngoingCallState extends State<OngoingCall> {
-
   final CallsViewModel callsViewModel = Get.find();
 
   final widgetConfiguration = GetIt.I.get<WidgetConfiguration>();
@@ -43,7 +41,6 @@ class _OngoingCallState extends State<OngoingCall> {
     return '$hours:$minutes:$secs';
   }
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -56,7 +53,6 @@ class _OngoingCallState extends State<OngoingCall> {
     _timer.cancel();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,22 +77,23 @@ class _OngoingCallState extends State<OngoingCall> {
               ],
             ),
           ),
-
           Spacer(),
-
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 47),
             child: Column(
               children: [
-
                 Center(
-                  child: SvgPicture.network(widgetConfiguration.logo!, width: 40, height: 40,),
+                  child: Image.network(
+                    widgetConfiguration.logo!,
+                    width: 40,
+                    height: 40,
+                  ),
                 ),
-
-                SizedBox(height: 20,),
-
+                SizedBox(
+                  height: 20,
+                ),
                 Text(
-                  widgetConfiguration.businessName!,
+                  widgetConfiguration.business?.name ?? "No business name",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xFF173556),
@@ -105,9 +102,9 @@ class _OngoingCallState extends State<OngoingCall> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-
-                SizedBox(height: 10,),
-
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   _formatTime(_seconds),
                   textAlign: TextAlign.center,
@@ -118,15 +115,12 @@ class _OngoingCallState extends State<OngoingCall> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-
               ],
             ),
           ),
-
           SizedBox(
             height: 90,
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Row(
@@ -134,52 +128,54 @@ class _OngoingCallState extends State<OngoingCall> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
-                  onTap: (){
-                    callsViewModel.toggleSpeaker();
-                  },
-                    child: SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/speaker_icon.svg")),
-
+                    onTap: () {
+                      callsViewModel.toggleSpeaker();
+                    },
+                    child: SvgPicture.network(
+                        "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/speaker_icon.svg")),
+                Spacer(),
+                InkWell(
+                    onTap: () {
+                      callsViewModel.toggleMute();
+                    },
+                    child: SvgPicture.network(
+                        "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/mute_icon.svg")),
                 Spacer(),
 
-                InkWell(
-                  onTap: (){
-                    callsViewModel.toggleMute();
-                  },
-                    child: SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/mute_icon.svg")),
+                Obx(() {
+                  // Navigate to LoginScreen if not logged in
+                  if (callsViewModel.callHasEnded.value) {
+                    widget.pageController.nextPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                  return InkWell(
+                    onTap: () {
+                      callsViewModel.hangupCall();
 
-                Spacer(),
-
-                InkWell(
-                  onTap: (){
-                    callsViewModel.hangupCall();
-
-                    if(callsViewModel.callHasEnded.value){
-                      print("Over here");
-                      // widget.pageController.nextPage(
-                      //   duration: Duration(milliseconds: 300),
-                      //   curve: Curves.easeInOut,
-                      // );
-                      // counterModel.decrement();
-                    }
-                  },
-                    child: SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/end_icon.svg")),
+                    },
+                    child: SvgPicture.network(
+                        "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/end_icon.svg"),
+                  );
+                }),
               ],
             ),
           ),
-
           Spacer(),
-
-          SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/powered_by_pressone.svg",),
-
+          SvgPicture.network(
+            "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/powered_by_pressone.svg",
+          ),
           SizedBox(
             height: 24,
           ),
-
           Container(
             width: MediaQuery.of(context).size.width,
             height: 10,
             clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(color: Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF')))),
+            decoration: BoxDecoration(
+                color: Color(int.parse(widgetConfiguration.primaryBgColor!
+                    .replaceAll('#', '0xFF')))),
           )
         ],
       ),

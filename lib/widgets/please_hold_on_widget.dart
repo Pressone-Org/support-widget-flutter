@@ -70,7 +70,7 @@ class _PleaseHoldOnState extends State<PleaseHoldOn> with SingleTickerProviderSt
             ),
             child: Padding(
               padding: const EdgeInsets.only(left: 10),
-              child: SvgPicture.network(widgetConfiguration.logo!, width: 40, height: 40,),
+              child: Image.network(widgetConfiguration.logo!, width: 40, height: 40,),
             ),
           ),
         ),
@@ -90,7 +90,7 @@ class _PleaseHoldOnState extends State<PleaseHoldOn> with SingleTickerProviderSt
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: Image.network(
+                          child: SvgPicture.network(
                               "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/close.svg")),
                     ],
                   ),

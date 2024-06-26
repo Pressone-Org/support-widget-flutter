@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:get/get.dart' as GT;
 import 'package:get_it/get_it.dart';
 import 'package:live_call_widget_flutter/helper/logger.dart';
 import 'package:live_call_widget_flutter/models/counter_model.dart';
@@ -29,6 +30,8 @@ class Line with SipUaHelperListener {
   late RegistrationState _state;
   late CallNotifier _notifier; // reference to view_model.
   late SIPUAHelper? _helper;
+
+  // CallsViewModel callsViewModel = GT.Get.put(CallsViewModel());
 
   final mediaConstraints = <String, dynamic>{'audio': true, 'video': false};
   MediaStream? _localStream;
@@ -169,6 +172,7 @@ class Line with SipUaHelperListener {
         .call(phoneNumber, voiceonly: true, mediaStream: mediaStream ?? null)
         .then((bool success) {
       if (!success) {
+        // callsViewModel.setShowNewCall();
         // AppSnackBar.showErrorSnackBar(message: 'Not connected, you will need to register. Please try again.', title: "Error");
       }
     });

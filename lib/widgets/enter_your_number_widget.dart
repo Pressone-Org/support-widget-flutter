@@ -4,9 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
-import 'package:live_call_widget_flutter/models/counter_model.dart';
-import 'package:live_call_widget_flutter/models/line.dart';
 import 'package:live_call_widget_flutter/models/value_listener.dart';
 import 'package:live_call_widget_flutter/models/widget_configuration.dart';
 import 'package:live_call_widget_flutter/viewmodel/calls_viewmodel.dart';
@@ -162,37 +159,48 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                                 width: 10,
                               ),
 
-                              ElevatedButton(
-                                onPressed: () {
+                              Obx(() {
+                                // Navigate to LoginScreen if not logged in
+                                if (callsViewModel.showNewCall.value) {
+                                  widget.pageController.nextPage(
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut,
+                                  );
+                                }
+                                return ElevatedButton(
+                                  onPressed: () {
 
-                                  print("business number: ${widgetConfiguration.businessNumbers}");
-                                  callsViewModel.callNumber(widgetConfiguration.businessNumbers ?? "02017003023");
+                                    print("business number: ${widgetConfiguration.businessNumbers}");
+                                    callsViewModel.callNumber(widgetConfiguration.businessNumbers ?? "02017003023");
 
-                                  if(callsViewModel.showNewCall.value){
-                                    print("callsViewModel.showNewCall.value: ${callsViewModel.showNewCall.value}");
+                                      print("callsViewModel.showNewCall.value: ${callsViewModel.showNewCall.value}");
 
-                                    widget.pageController.nextPage(
-                                      duration: Duration(milliseconds: 300),
-                                      curve: Curves.easeInOut,
-                                    );
+                                    // if(callsViewModel.showNewCall.value){
+                                    //   print("callsViewModel.showNewCall.value: ${callsViewModel.showNewCall.value}");
+                                    //
+                                    //   widget.pageController.nextPage(
+                                    //     duration: Duration(milliseconds: 300),
+                                    //     curve: Curves.easeInOut,
+                                    //   );
+                                    //
+                                    // }
 
-                                  }
-
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color>(
-                                    const Color(0xFF1671D9),
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all<Color>(
+                                      const Color(0xFF1671D9),
+                                    ),
+                                    shape: MaterialStateProperty.all<CircleBorder>(
+                                      const CircleBorder(),
+                                    ),
                                   ),
-                                  shape: MaterialStateProperty.all<CircleBorder>(
-                                    const CircleBorder(),
+                                  child: const Icon(
+                                    CupertinoIcons.arrow_right,
+                                    size: 20,
+                                    color: Colors.white,
                                   ),
-                                ),
-                                child: const Icon(
-                                  CupertinoIcons.arrow_right,
-                                  size: 20,
-                                  color: Colors.white,
-                                ),
-                              )
+                                );
+                              }),
 
                             ],
                           )
