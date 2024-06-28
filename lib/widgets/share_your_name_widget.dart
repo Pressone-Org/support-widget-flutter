@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
 import 'package:live_call_widget_flutter/models/widget_configuration.dart';
+import 'package:live_call_widget_flutter/viewmodel/calls_viewmodel.dart';
 import 'package:lottie/lottie.dart';
 
 class ShareYourName extends StatefulWidget {
@@ -19,6 +20,8 @@ class _ShareYourNameState extends State<ShareYourName> {
   final TextEditingController _nameController = TextEditingController();
 
   final widgetConfiguration = GetIt.I.get<WidgetConfiguration>();
+
+  CallsViewModel callsViewModel = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +43,8 @@ class _ShareYourNameState extends State<ShareYourName> {
                 ),
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  color: Color(0xFF1571D8),
-                  shape: RoundedRectangleBorder(
+                  color:Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF'))),
+                  shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(1223.02),
                       topRight: Radius.circular(1223.02),
@@ -99,20 +102,21 @@ class _ShareYourNameState extends State<ShareYourName> {
                           const SizedBox(
                             height: 20,
                           ),
-                          Text(
+                          const Text(
                             'Enter your name',
                             style: TextStyle(
                               fontSize: 13,
                               color: Color(0xFF6F8295),
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Row(
                             children: [
                               Expanded(
                                 child: TextField(
-                                  decoration: InputDecoration(
-                                    hintText: 'gacad@google.com',
+                                  controller: _nameController,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Durotimi Johnson',
                                     border: UnderlineInputBorder(),
                                   ),
                                 ),
@@ -121,17 +125,18 @@ class _ShareYourNameState extends State<ShareYourName> {
                                 width: 20,
                               ),
                               ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                  callsViewModel.feedbackName.value = _nameController.text;
                                   widget.pageController.nextPage(
-                                    duration: Duration(milliseconds: 300),
+                                    duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeInOut,
                                   );
                                   // print("Name entered: ${_nameController.text}");
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                    const Color(0xFF1671D9),
+                                      MaterialStateProperty.all<Color>( Color(int.parse(widgetConfiguration.primaryBgColor!
+                                        .replaceAll('#', '0xFF'))),
                                   ),
                                   shape:
                                       MaterialStateProperty.all<CircleBorder>(
@@ -155,7 +160,7 @@ class _ShareYourNameState extends State<ShareYourName> {
                   height: 25,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     children: [
                       Lottie.network(
@@ -178,7 +183,7 @@ class _ShareYourNameState extends State<ShareYourName> {
                   width: MediaQuery.of(context).size.width,
                   height: 10,
                   clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(color: Color(int.parse(widgetConfiguration!.primaryBgColor!.replaceAll('#', '0xFF')))),
+                  decoration: BoxDecoration(color: Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF')))),
                 )
               ],
             ),

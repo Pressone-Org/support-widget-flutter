@@ -9,16 +9,12 @@ import 'package:live_call_widget_flutter/viewmodel/call_notifier.dart';
 import 'package:sip_ua/sip_ua.dart';
 
 class CallsViewModel extends BaseViewModel implements CallNotifier {
-
   List<Line> _lines = [];
-  Line? _activeLine; // This is the active Line in use. User is able to switch numbers in dialpad_widgets/my_numbers.dart
-  Call? _activeCall; // This is null if there is no active call. An active call is not the same as an answered call, or ongoing call.
+  Line?
+      _activeLine; // This is the active Line in use. User is able to switch numbers in dialpad_widgets/my_numbers.dart
+  Call?
+      _activeCall; // This is null if there is no active call. An active call is not the same as an answered call, or ongoing call.
   RxBool disconnected = false.obs;
-  GlobalKey one = GlobalKey();
-  GlobalKey two = GlobalKey();
-  GlobalKey three = GlobalKey();
-  GlobalKey four = GlobalKey();
-  GlobalKey five = GlobalKey();
   RxBool _callIsStreaming = false.obs;
   RxBool _callIsAccepted = false.obs;
   RxBool _showNewCall = false.obs;
@@ -27,59 +23,33 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
   RxBool _shouldAcceptAuto = false.obs; //"Calling", "Incoming", "Ended"
   RxBool _shouldRejectAuto = false.obs; //"Calling", "Incoming", "Ended"
 
+  RxBool _callIsFailed = false.obs;
 
-
+  RxString feedbackDescription = "".obs;
+  RxString feedbackName = "".obs;
+  RxString feedbackEmail = "".obs;
+  RxString feedbackMessage = "".obs;
+  RxInt feedbackRating = 0.obs;
+  RxString feedbackMobile = "".obs;
+  RxString feedbackCategories = "".obs;
+  RxString feedbackCategoriesMessage = "".obs;
   RxBool _muted = false.obs;
   RxBool _speakerOn = false.obs;
   RxBool _onHold = false.obs;
   RxBool _transfer = false.obs;
-
-  RxString selectedNumber  = "".obs;
-
-  String? voipToken = "";
-  String? fcmToken = "";
-
-  RxString loadingMessage = "Please wait".obs;
-
-
-  RxDouble newCreditBalance = 0.0.obs;
-  bool disableCallButton = false;
-  RxString businessIdToUseForCallLogs = "".obs;
-  bool playNotificationSound = false;
-  RxBool showConnecting = false.obs;
-  List<bool> addBoolToToggleCallLog = [];
+  RxBool _callError = false.obs;
 
   CallsViewModel() {
     logger.i("Call view model created");
   }
 
   void initialiseLines(Line? user) {
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       print("initialiseLines");
       try {
-        // callkeepHelper = Get.isRegistered<CallkeepHelper>()
-        //     ? Get.find()
-        //     : Get.put(CallkeepHelper());
       } catch (e) {
         logger.d("ERROR ${e.toString()}");
       }
-      // callkeepHelper.initPushkit((CallKeepPushKitToken event) {
-      //   this.voipToken = event.token; // update backend with token
-      //   try {
-      //     // UserWebServiceImpl()
-      //     //     .updateDeviceVoIPToken(
-      //     //     token: event.token,
-      //     //     deviceType: Platform.isIOS ? "ios" : "android")
-      //     //     .then((value) {
-      //     //   logger.i('VoIP Token Registered => ${event.token}.');
-      //     // });
-      //   } catch (e) {
-      //     logger.e('VoIP Token Registered failed => $e');
-      //   }
-      //
-      //   /// Only iOS devices receive a PushKitToken, so this will only be called on apple phones.
-      //   _initLines(user);
-      // });
     }
 
     /// Other non ios devices should initialise line here.
@@ -93,12 +63,6 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
       logger.e("BUG! Looks like we are initialising lines twice");
       return;
     }
-
-    // Activate SIP lines
-    // user!.receivers!.forEach((receiver) {
-    //   Line? line = receiver.line;
-    //
-    // });
     if (line != null) {
       line.init(this);
       line.connect();
@@ -126,32 +90,12 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
     return _activeLine;
   }
 
-
-  // void callContact(DeviceContact contact) {
-  //   Get.back();
-  //   Get.to(() => ActiveCallScreen(), transition: Transition.leftToRight);
-  // }
-
   void callNumber(String phoneNumber) {
     logger.w("Call view model: callNumber called");
     if (_lines.isEmpty) {
       _callIsAccepted.value = false;
       throw Exception("No lines to call");
-    }
-    // else if (newCreditBalance.value <= 0) {
-    //   _callIsAccepted.value = false;
-    //   throw Exception("No credit to call");
-    // }
-    else {
-      // numberOfContact.value = phoneNumber;
-      // nameOfContact.value.isNotEmpty ? _model.uploadAllContacts(mobile: numberOfContact.value, name: nameOfContact.value, businessNumber: _model.businessNumber?.id, userId: authenticationController.user!.id, ) : null;
-      // if(activeLine!.getDisplayName()!.startsWith("0") && !SharedPreferences.getCanCallNigeria()){
-      //   throw Exception("Can't make calls with Nigerian number outside Nigeria");
-      // } else{
-      //
-      // }
-      // final int callCount = SharedPreferences.retrieveCallCount()!;
-      // SharedPreferences.saveCallCounts(callCount + 1);
+    } else {
       activeLine!.call(phoneNumber);
     }
   }
@@ -165,7 +109,6 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
     logger.i('Dtmf tone => $tone');
     _activeCall!.sendDTMF(tone);
   }
-
 
   void _resetValues() {
     _callIsEnded.value = false;
@@ -183,9 +126,10 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
     _activeCall = call;
     _activeLine = line;
     _showNewCall.value = true;
+    _callIsFailed.value = false;
+    _callIsEnded.value = false;
 
     print("new call here");
-
   }
 
   RxBool get isOutgoingCall {
@@ -204,8 +148,28 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
     return _showNewCall;
   }
 
- void setShowNewCall() {
-   _showNewCall.value = true;
+  RxBool get showCallHasFailed {
+    return _callIsFailed;
+  }
+
+  RxBool get showCallError {
+    return _callError;
+  }
+
+  void setCallIsFailed() {
+    _callIsFailed.value = true;
+  }
+
+  void setCallErrorTrue() {
+    _callError.value = true;
+  }
+
+  void setCallErrorFalse() {
+    _callError.value = false;
+  }
+
+  void setShowNewCall() {
+    _showNewCall.value = true;
   }
 
   RxBool get acceptAuto {
@@ -247,6 +211,7 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
   RxBool get speakerOn {
     return _speakerOn;
   }
+
   RxBool get transferOn {
     return _transfer;
   }
@@ -257,8 +222,6 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
 
   void setCallAccepted(bool accepted) {
     _callIsAccepted.value = accepted;
-    if(disableCallButton && !accepted)
-      disableCallButton = false;
   }
 
   /// callEnded gets called when a call has ended. This could happen because
@@ -279,9 +242,8 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
     _shouldRejectAuto.value = false;
     _shouldAcceptAuto.value = false;
     _showNewCall.value = false;
-    disableCallButton = false;
     // Also hanguo native phone system (callkeep)
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       try {
         // callkeepHelper.endCall();
       } catch (e, st) {
@@ -289,7 +251,6 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
       }
     }
     logger.i("got to this point");
-
   }
 
   void rejectCall() {
@@ -327,7 +288,7 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
 
   void answerCall() async {
     _activeLine!.answer(_activeCall!);
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       try {
         // await callkeepHelper.answerCall();
       } catch (e) {
@@ -348,7 +309,7 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
       _activeCall!.mute(true, false);
       _muted.value = true;
     }
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       // callkeepHelper.toggleMuteCall(_muted.value);
     }
   }
@@ -380,7 +341,7 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
       _activeCall!.hold();
       _onHold.value = true;
     }
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       // callkeepHelper.toggleHoldCall(_onHold.value);
     }
   }
@@ -416,23 +377,20 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
     //   }
     // });
     // String? pressOneNumber =_activeLine!.receiver!.businessNumber!.phoneNumber;
-
   }
 
-  void startRinging() {
-
-  }
+  void startRinging() {}
 
   void stopRinging() {
     // FlutterRingtonePlayer.stop();
   }
 
   String? getPushKitToken() {
-    return voipToken;
+    return "";
   }
 
   String? getFCMToken() {
-    return fcmToken;
+    return "";
   }
 
   void connectLines() {
@@ -462,6 +420,4 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
   void notifyListeners() {
     // TODO: implement notifyListeners
   }
-
 }
-

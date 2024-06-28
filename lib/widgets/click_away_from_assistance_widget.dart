@@ -3,12 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
-import 'package:live_call_widget_flutter/models/counter_model.dart';
 import 'package:live_call_widget_flutter/models/line.dart';
-import 'package:live_call_widget_flutter/models/value_listener.dart';
 import 'package:live_call_widget_flutter/models/widget_configuration.dart';
 import 'package:live_call_widget_flutter/viewmodel/calls_viewmodel.dart';
-import 'package:lottie/lottie.dart';
 
 class ClickAwayFromAssistance extends StatefulWidget {
   final PageController pageController;
@@ -54,8 +51,8 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
               ),
               clipBehavior: Clip.antiAlias,
               decoration: ShapeDecoration(
-                color: Color(0xFF1571D8),
-                shape: RoundedRectangleBorder(
+                color: Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF'))),
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(1223.02),
                     topRight: Radius.circular(1223.02),
@@ -98,8 +95,8 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                 child: Column(
                   children: [
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 18),
                       child: Text(
                         'You are a click away from assistance',
                         textAlign: TextAlign.center,
@@ -112,11 +109,11 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                       ),
                     ),
 
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
 
-                    Text(
+                    const Text(
                       'Click on the button to talk to someone on our team',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -127,7 +124,7 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                       ),
                     ),
 
-                    SizedBox(
+                    const SizedBox(
                       height: 47,
                     ),
 
@@ -144,25 +141,25 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                         padding: const EdgeInsets.all(26.67),
                         clipBehavior: Clip.antiAlias,
                         decoration: ShapeDecoration(
-                          color: Color(0xFF1571D8),
+                          color: Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF'))),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(500),
                           ),
                           shadows: [
                             BoxShadow(
-                              color: Color(0xFF1671D9),
+                              color: Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF'))),
                               blurRadius: 0,
                               offset: Offset(0, 0),
                               spreadRadius: 1.67,
                             ),
-                            BoxShadow(
+                            const BoxShadow(
                               color: Color(0x19000000),
                               blurRadius: 1.67,
                               offset: Offset(0, 1.67),
                               spreadRadius: 0,
                             ),
                             BoxShadow(
-                              color: Color(0x871671D9),
+                              color:Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF'))),
                               blurRadius: 33.67,
                               offset: Offset(0, 23.33),
                               spreadRadius: -28.33,
@@ -179,7 +176,7 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
 
               Spacer(),
 
-              Text.rich(
+              const Text.rich(
                 TextSpan(
                   text:
                       'By dialling, you consent to Prime Pay collecting, processing, and storing my information in accordance with our ',
@@ -204,13 +201,13 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                 textAlign: TextAlign.center,
               ),
 
-              SizedBox(
+              const SizedBox(
                 height: 18,
               ),
 
               SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/powered_by_pressone.svg",),
 
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
 
@@ -218,7 +215,7 @@ class _ClickAwayFromAssistanceState extends State<ClickAwayFromAssistance> {
                 width: MediaQuery.of(context).size.width,
                 height: 10,
                 clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(color: Color(int.parse(widgetConfiguration!.primaryBgColor!.replaceAll('#', '0xFF')))),
+                decoration: BoxDecoration(color: Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF')))),
               )
             ],
           )

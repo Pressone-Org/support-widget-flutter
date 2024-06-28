@@ -29,7 +29,7 @@ class ThankYouForProvidingFeedback extends StatelessWidget {
             ),
             clipBehavior: Clip.antiAlias,
             decoration: ShapeDecoration(
-              color: Color(0xFF1571D8),
+              color: Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF'))),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(1223.02),
@@ -126,9 +126,9 @@ class ThankYouForProvidingFeedback extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           ),
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF'))),
                         ),
-                        child: Text(
+                        child: const Text(
                           'Return home',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -144,6 +144,7 @@ class ThankYouForProvidingFeedback extends StatelessWidget {
                 ],
               ),
             ),
+
             Spacer(),
 
             const SizedBox(

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
+import 'package:live_call_widget_flutter/models/feedback_model.dart';
 import 'package:live_call_widget_flutter/models/widget_configuration.dart';
+import 'package:live_call_widget_flutter/network/user/user_web_service_impl.dart';
+import 'package:live_call_widget_flutter/viewmodel/calls_viewmodel.dart';
+import 'package:lottie/lottie.dart';
 
 class WeValueYourFeedback extends StatefulWidget {
   final PageController pageController;
@@ -16,6 +21,10 @@ class WeValueYourFeedback extends StatefulWidget {
 class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
   final widgetConfiguration = GetIt.I.get<WidgetConfiguration>();
 
+  final TextEditingController _reviewController = TextEditingController();
+
+  CallsViewModel callsViewModel = Get.find();
+
   bool selectedEmojiOne = true;
 
   bool selectedEmojiTwo = false;
@@ -25,6 +34,8 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
   bool selectedEmojiFour = false;
 
   bool selectedEmojiFive = false;
+
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +55,8 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
             ),
             clipBehavior: Clip.antiAlias,
             decoration: ShapeDecoration(
-              color: Color(0xFF1571D8),
-              shape: RoundedRectangleBorder(
+              color: Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF'))),
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(1223.02),
                   topRight: Radius.circular(1223.02),
@@ -83,14 +94,14 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 18),
+              padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'We value your feedback',
                     style: TextStyle(
                       color: Color(0xFF173556),
@@ -99,10 +110,10 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 7,
                   ),
-                  Text(
+                  const Text(
                     'Please rate your call experience below.',
                     style: TextStyle(
                       color: Color(0xFF6F8295),
@@ -111,10 +122,10 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
-                  Text(
+                  const Text(
                     'How do you feel about this call?',
                     style: TextStyle(
                       color: Color(0xFF4E6785),
@@ -123,7 +134,7 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   Row(
@@ -141,7 +152,7 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                             });
                           },
                           child: Text(selectedEmojiOne ? "😍" : "Inactive",
-                          style: TextStyle(color: Colors.red),)),
+                          style: const TextStyle(color: Colors.red),)),
                       const SizedBox(
                         width: 9,
                       ),
@@ -203,24 +214,25 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Text(
+                  const Text(
                     'Write your review',
                     style: TextStyle(
                       fontSize: 13,
                       color: Color(0xFF6F8295),
                     ),
                   ),
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
                   TextField(
-                    decoration: InputDecoration(
+                    controller: _reviewController,
+                    decoration: const InputDecoration(
                       hintText: '',
                       border: UnderlineInputBorder(),
                     ),
                   ),
-                  SizedBox(height: 32),
+                  const SizedBox(height: 32),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,32 +240,32 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                       Expanded(
                         flex: 1,
                         child: InkWell(
-                          onTap: () {
+                          onTap: (){
                             widget.pageController.previousPage(
-                              duration: Duration(milliseconds: 300),
+                              duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOut,
                             );
                           },
                           child: Container(
                             width: 92,
-                            height: 44,
+                            height: 50,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 14, vertical: 8),
                             clipBehavior: Clip.antiAlias,
                             decoration: ShapeDecoration(
                               color: Colors.white,
                               shape: RoundedRectangleBorder(
-                                side: BorderSide(color: Color(0xFFD0D4DD)),
+                                side: const BorderSide(color: Color(0xFFD0D4DD)),
                                 borderRadius: BorderRadius.circular(300),
                               ),
                               shadows: [
-                                BoxShadow(
+                                const BoxShadow(
                                   color: Color(0x28464E60),
                                   blurRadius: 0,
                                   offset: Offset(0, 0),
                                   spreadRadius: 1,
                                 ),
-                                BoxShadow(
+                                const BoxShadow(
                                   color: Color(0x19000000),
                                   blurRadius: 1,
                                   offset: Offset(0, 1),
@@ -270,7 +282,7 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                                   "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/back_btn.svg",
                                 ),
                                 const SizedBox(width: 8),
-                                Text(
+                                const Text(
                                   'Back',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -286,7 +298,7 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 24,
                       ),
                       Expanded(
@@ -296,10 +308,23 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                             width: double.infinity,
                             height: 50,
                             child: ElevatedButton(
-                              onPressed: () {
-                                // Handle continue button press
+                              onPressed: () async {
+                                callsViewModel.feedbackMessage.value = _reviewController.text;
+                                FeedbackModel feedbackModel = FeedbackModel();
+                                feedbackModel.message = callsViewModel.feedbackMessage.value;
+                                feedbackModel.email = callsViewModel.feedbackEmail.value;
+                                feedbackModel.mobile = callsViewModel.feedbackMobile.value;
+                                feedbackModel.name = callsViewModel.feedbackName.value;
+                                feedbackModel.rating = callsViewModel.feedbackRating.value;
+
+                                setState(() {
+                                  loading = true;
+                                });
+
+                                await UserWebServiceImpl().submitFeedback(feedbackModel: feedbackModel);
+
                                 widget.pageController.nextPage(
-                                  duration: Duration(milliseconds: 300),
+                                  duration: const Duration(milliseconds: 300),
                                   curve: Curves.easeInOut,
                                 );
                               },
@@ -307,9 +332,10 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25),
                                 ),
-                                backgroundColor: Colors.blue,
+                                backgroundColor: Color(int.parse(widgetConfiguration.primaryBgColor!
+                                    .replaceAll('#', '0xFF'))),
                               ),
-                              child: Text(
+                              child: !loading ? const Text(
                                 'Continue',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -318,7 +344,10 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                                   fontFamily: FontFamily.avertaDemoPECuttedDemo,
                                   fontWeight: FontWeight.w600,
                                 ),
-                              ),
+                              ) :
+                              Lottie.network(
+                                  'https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/Connecting.json')
+                              ,
                             ),
                           ),
                         ),
@@ -328,7 +357,7 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             const SizedBox(
               height: 18,
             ),
@@ -343,7 +372,7 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
               height: 10,
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                  color: Color(int.parse(widgetConfiguration!.primaryBgColor!
+                  color: Color(int.parse(widgetConfiguration.primaryBgColor!
                       .replaceAll('#', '0xFF')))),
             )
           ],

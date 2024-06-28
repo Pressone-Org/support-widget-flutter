@@ -57,7 +57,7 @@ class _RingingState extends State<Ringing> with SingleTickerProviderStateMixin {
                 ),
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  color: Color(0xFF1571D8),
+                  color: Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF'))),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(1223.02),

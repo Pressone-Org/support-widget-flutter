@@ -1,14 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:get/get.dart' as GT;
-import 'package:get_it/get_it.dart';
 import 'package:live_call_widget_flutter/helper/logger.dart';
-import 'package:live_call_widget_flutter/models/counter_model.dart';
 import 'package:live_call_widget_flutter/viewmodel/call_notifier.dart';
 import 'package:live_call_widget_flutter/viewmodel/calls_viewmodel.dart';
 import 'package:sip_ua/sip_ua.dart';
-
-import 'base_model.dart';
 
 
 class Line with SipUaHelperListener {
@@ -31,7 +27,7 @@ class Line with SipUaHelperListener {
   late CallNotifier _notifier; // reference to view_model.
   late SIPUAHelper? _helper;
 
-  // CallsViewModel callsViewModel = GT.Get.put(CallsViewModel());
+  CallsViewModel callsViewModel = GT.Get.put(CallsViewModel());
 
   final mediaConstraints = <String, dynamic>{'audio': true, 'video': false};
   MediaStream? _localStream;
@@ -158,6 +154,7 @@ class Line with SipUaHelperListener {
   }
 
   void call(String phoneNumber) async {
+    callsViewModel.setCallErrorFalse();
     phoneNumber = phoneNumber.length <= 5
         ? "$phoneNumber@${getDomain()}"
         : phoneNumber;
@@ -172,6 +169,7 @@ class Line with SipUaHelperListener {
         .call(phoneNumber, voiceonly: true, mediaStream: mediaStream ?? null)
         .then((bool success) {
       if (!success) {
+        callsViewModel.setCallErrorTrue();
         // callsViewModel.setShowNewCall();
         // AppSnackBar.showErrorSnackBar(message: 'Not connected, you will need to register. Please try again.', title: "Error");
       }
@@ -301,6 +299,8 @@ class Line with SipUaHelperListener {
       } else {
 
       }
+
+      callsViewModel.setCallIsFailed();
 
       // if ([408, 480, 603].contains(_callState.cause!.status_code)) {
       //   _notifier.setCallStatusLabel("Call Failed.");

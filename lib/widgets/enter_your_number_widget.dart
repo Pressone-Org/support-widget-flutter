@@ -7,6 +7,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:live_call_widget_flutter/models/value_listener.dart';
 import 'package:live_call_widget_flutter/models/widget_configuration.dart';
 import 'package:live_call_widget_flutter/viewmodel/calls_viewmodel.dart';
+import 'package:live_call_widget_flutter/widgets/toast/toaster.dart';
 import 'package:lottie/lottie.dart';
 
 class EnterYourNumber extends StatefulWidget {
@@ -25,23 +26,13 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
 
   CallsViewModel callsViewModel = Get.find();
 
-  // final counterModel = GetIt.I.get<CounterModel>();
-
-  ValueListener valueListener = ValueListener();
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // Attach a listener to the counter model
-    // counterModel.addListener(() {
-    //   valueListener.onCounterChanged(counterModel.counter);
-    // });
   }
 
   @override
   void dispose() {
-    // counterModel.removeListener(() {});
     _phoneNumberController.dispose();
     super.dispose();
   }
@@ -68,8 +59,8 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                 ),
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  color: Color(0xFF1571D8),
-                  shape: RoundedRectangleBorder(
+                  color: Color(int.parse(widgetConfiguration.primaryBgColor!.replaceAll('#', '0xFF'))),
+                  shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(1223.02),
                       topRight: Radius.circular(1223.02),
@@ -128,29 +119,27 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                           const SizedBox(
                             height: 20,
                           ),
-                          Text(
+                          const Text(
                             'Phone Number',
                             style: TextStyle(
                               fontSize: 13,
                               color: Color(0xFF6F8295),
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
 
                           Row(
                             children: [
                               Expanded(
                                 child: IntlPhoneField(
                                   iconPosition: IconPosition.trailing,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: UnderlineInputBorder(),
                                     hintText: "8148642968"
                                   ),
                                   initialCountryCode: 'NG', // Nigeria
                                   onChanged: (phone) {
-                                    print(phone.completeNumber);
-                                    print(phone.number.toString());
-                                    _phoneNumberController.text = phone.number.toString();// Output the full number when it changes
+                                    _phoneNumberController.text = phone.completeNumber.toString(); // Output the full number when it changes
                                   },
                                 ),
                               ),
@@ -163,32 +152,27 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                                 // Navigate to LoginScreen if not logged in
                                 if (callsViewModel.showNewCall.value) {
                                   widget.pageController.nextPage(
-                                    duration: Duration(milliseconds: 300),
+                                    duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeInOut,
                                   );
                                 }
+
+                                if(callsViewModel.showCallError.value){
+                                  Toaster.showError(context, message: "Not connected, you will need to register. Please try again.");
+                                }
+
                                 return ElevatedButton(
                                   onPressed: () {
 
-                                    print("business number: ${widgetConfiguration.businessNumbers}");
+                                    callsViewModel.feedbackMobile.value = _phoneNumberController.text;
+
                                     callsViewModel.callNumber(widgetConfiguration.businessNumbers ?? "02017003023");
-
-                                      print("callsViewModel.showNewCall.value: ${callsViewModel.showNewCall.value}");
-
-                                    // if(callsViewModel.showNewCall.value){
-                                    //   print("callsViewModel.showNewCall.value: ${callsViewModel.showNewCall.value}");
-                                    //
-                                    //   widget.pageController.nextPage(
-                                    //     duration: Duration(milliseconds: 300),
-                                    //     curve: Curves.easeInOut,
-                                    //   );
-                                    //
-                                    // }
 
                                   },
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all<Color>(
-                                      const Color(0xFF1671D9),
+                                      Color(int.parse(widgetConfiguration.primaryBgColor!
+                                          .replaceAll('#', '0xFF'))),
                                     ),
                                     shape: MaterialStateProperty.all<CircleBorder>(
                                       const CircleBorder(),
@@ -215,7 +199,7 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
 
 
                  Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     children: [
                       Lottie.network(
