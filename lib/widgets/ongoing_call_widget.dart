@@ -269,7 +269,7 @@ class _OngoingCallState extends State<OngoingCall> {
                             ),
                           )
                               : Lottie.network(
-                              'https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/Connecting.json'),
+                              'https://pressone-prod.fra1.cdn.digitaloceanspaces.com/sdk_images/loading.json'),
                         ),
                       ),
                     ),
