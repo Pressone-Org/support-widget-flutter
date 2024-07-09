@@ -75,9 +75,6 @@ class LiveCallWidget {
 
   }
 
-  static setSecretKey(String secretKey) async{
-
-  }
 }
 
 

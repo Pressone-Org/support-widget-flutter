@@ -142,7 +142,7 @@ class _ThankYouRingingOurTeamState extends State<ThankYouRingingOurTeam> with Si
                       Row(
                         children: [
                           Lottie.network(
-                              'https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/Ringing.json'),
+                              'https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/Connecting.json'),
                         ],
                       )
                     ],

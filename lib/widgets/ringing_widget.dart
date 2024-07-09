@@ -105,7 +105,7 @@ class _RingingState extends State<Ringing> with SingleTickerProviderStateMixin {
                       Row(
                         children: [
                           Lottie.network(
-                              'https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/Ringing.json'),
+                              'https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/Connecting.json'),
                         ],
                       )
                     ],

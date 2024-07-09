@@ -149,10 +149,11 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                               selectedEmojiThree = false;
                               selectedEmojiFour = false;
                               selectedEmojiFive = false;
+                              callsViewModel.feedbackRating.value = 1;
                             });
                           },
-                          child: Text(selectedEmojiOne ? "😍" : "Inactive",
-                          style: const TextStyle(color: Colors.red),)),
+                          child: selectedEmojiOne ? Text("😍",
+                         ) : const Text("")),
                       const SizedBox(
                         width: 9,
                       ),
@@ -164,9 +165,10 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                               selectedEmojiThree = false;
                               selectedEmojiFour = false;
                               selectedEmojiFive = false;
+                              callsViewModel.feedbackRating.value = 2;
                             });
                           },
-                          child: Text(selectedEmojiTwo ? "🙂" : "Inactive")),
+                          child: selectedEmojiTwo ? const Text("🙂") : SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/sdk_images/emoji_two.svg")),
                       const SizedBox(
                         width: 9,
                       ),
@@ -178,9 +180,10 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                               selectedEmojiThree = true;
                               selectedEmojiFour = false;
                               selectedEmojiFive = false;
+                              callsViewModel.feedbackRating.value = 3;
                             });
                           },
-                          child: Text(selectedEmojiThree ? "😐" : "Inactive")),
+                          child: selectedEmojiThree ? const Text("😐") : SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/sdk_images/emoji_three.svg")),
                       const SizedBox(
                         width: 9,
                       ),
@@ -192,9 +195,10 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                               selectedEmojiThree = false;
                               selectedEmojiFour = true;
                               selectedEmojiFive = false;
+                              callsViewModel.feedbackRating.value = 4;
                             });
                           },
-                          child: Text(selectedEmojiFour ? "🙁" : "Inactive")),
+                          child: selectedEmojiFour ? Text("🙁") : SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/sdk_images/emoji_four.svg")),
                       const SizedBox(
                         width: 9,
                       ),
@@ -206,9 +210,10 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                               selectedEmojiThree = false;
                               selectedEmojiFour = false;
                               selectedEmojiFive = true;
+                              callsViewModel.feedbackRating.value = 5;
                             });
                           },
-                          child: Text(selectedEmojiFive ? "😖" : "Inactive")),
+                          child: selectedEmojiFive ? const Text("😖") : SvgPicture.network("https://pressone-prod.fra1.cdn.digitaloceanspaces.com/sdk_images/emoji_five.svg")),
                       const SizedBox(
                         width: 9,
                       ),

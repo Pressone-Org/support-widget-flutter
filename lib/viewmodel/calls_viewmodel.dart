@@ -29,7 +29,7 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
   RxString feedbackName = "".obs;
   RxString feedbackEmail = "".obs;
   RxString feedbackMessage = "".obs;
-  RxInt feedbackRating = 0.obs;
+  RxInt feedbackRating = 1.obs;
   RxString feedbackMobile = "".obs;
   RxString feedbackCategories = "".obs;
   RxString feedbackCategoriesMessage = "".obs;

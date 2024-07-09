@@ -108,7 +108,7 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "Enter your phone number to enable call back",
+                            "Enter your phone number to enable call back and to proceed to make the call",
                             style: TextStyle(
                               color: Color(0xFF173556),
                               fontSize: 18,
@@ -203,7 +203,7 @@ class _EnterYourNumberState extends State<EnterYourNumber> {
                   child: Row(
                     children: [
                       Lottie.network(
-                          'https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/Ringing.json'),
+                          'https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/Connecting.json'),
                     ],
                   ),
                 ),
