@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:live_call_widget_flutter/generated/assets/fonts.gen.dart';
@@ -24,6 +25,12 @@ class _ThankYouForContactingUsState extends State<ThankYouForContactingUs> {
   CallsViewModel callsViewModel = Get.find();
 
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("got here too");
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -244,7 +251,15 @@ class _ThankYouForContactingUsState extends State<ThankYouForContactingUs> {
               }),
 
               const Spacer(),
-
+              const SizedBox(
+                height: 18,
+              ),
+              SvgPicture.network(
+                "https://pressone-prod.fra1.cdn.digitaloceanspaces.com/Mobile/powered_by_pressone.svg",
+              ),
+              const SizedBox(
+                height: 24,
+              ),
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 10,

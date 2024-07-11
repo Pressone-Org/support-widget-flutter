@@ -14,15 +14,7 @@ class NetworkAPICall {
 
   NetworkAPICall._internal();
 
-  Dio _dioClient = Dio(
-    BaseOptions(
-      connectTimeout: 100000,
-    ),
-  );
-
-  static const String baseUrl = "https://pressone-test-2339030b-457fd0c6a45b.herokuapp.com/api/";
-
-  // static const String BASE_URL = AppConfig.baseURL;
+  static const String baseUrl = "https://pressone-test-59417eaf-6e12ade0c5d8.herokuapp.com/api/";
 
   Future<dynamic> postHttp(String url, dynamic body,
       {Map<String, String>? header}) async {
@@ -110,12 +102,8 @@ class NetworkAPICall {
               message = "${response.statusCode}";
             } else {
               message = response.body.toString();
-              // "error code --> ${response.statusCode} ==> ${response.body.toString()}";
             }
-            // final Map<String, dynamic> data = jsonDecode(response.body);
             print("error: ${response.statusCode}");
-            // throw AppException(
-            //     message: message, errorCode: response.statusCode);
           } catch (e) {
             rethrow;
           }

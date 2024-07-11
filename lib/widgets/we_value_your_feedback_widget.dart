@@ -252,10 +252,10 @@ class _WeValueYourFeedbackState extends State<WeValueYourFeedback> {
                             );
                           },
                           child: Container(
-                            width: 92,
+                            width: 95,
                             height: 50,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 8),
+                                horizontal: 1, vertical: 0),
                             clipBehavior: Clip.antiAlias,
                             decoration: ShapeDecoration(
                               color: Colors.white,

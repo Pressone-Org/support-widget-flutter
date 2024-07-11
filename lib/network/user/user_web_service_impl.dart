@@ -21,7 +21,6 @@ class UserWebServiceImpl extends UserWebService {
       var body = {
         "public_key": geofencing.public_key,
       };
-      print(body);
       var response = await _networkAPICall
           .postHttp(getReceiverLine, jsonEncode(body), header: {
       "Pressone-X-Pub-Key": "$token",
@@ -54,7 +53,6 @@ class UserWebServiceImpl extends UserWebService {
         "Pressone-X-Pub-Key": "$token",
         HttpHeaders.contentTypeHeader: "application/json"
       });
-      print("Receiver line detail: ${response.toString()}");
     } catch (e, st) {
       logger.e("Error(getUserByMobile)-->>:$e $st");
       rethrow;

@@ -110,19 +110,10 @@ class CallsViewModel extends BaseViewModel implements CallNotifier {
     _activeCall!.sendDTMF(tone);
   }
 
-  void _resetValues() {
-    _callIsEnded.value = false;
-    _muted.value = false;
-    _speakerOn.value = false;
-    _onHold.value = false;
-    _transfer.value = false;
-    _callStatusLabel.value = isIncomingCall.value ? "Incoming" : "Calling";
-  }
 
   //Handles incoming calls
   @override
   void newCall(Call call, line) {
-    _resetValues();
     _activeCall = call;
     _activeLine = line;
     _showNewCall.value = true;

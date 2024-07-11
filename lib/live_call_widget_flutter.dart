@@ -162,10 +162,10 @@ class _PageViewWidgetState extends State<_PageViewWidget> {
                   )),
 
               // Screen three
-              Center(
-                  child: Ringing(
-                    pageController: _pageController,
-                  )),
+              // Center(
+              //     child: Ringing(
+              //       pageController: _pageController,
+              //     )),
 
               // Screen four
               Center(
@@ -174,10 +174,10 @@ class _PageViewWidgetState extends State<_PageViewWidget> {
                   )),
 
               // Screen four
-              Center(
-                  child: Ringing(
-                    pageController: _pageController,
-                  )),
+              // Center(
+              //     child: Ringing(
+              //       pageController: _pageController,
+              //     )),
 
               // Screen five
               Center(
