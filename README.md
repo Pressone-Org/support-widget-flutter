@@ -11,7 +11,7 @@ Add the library to the pubspec.yaml file
 ```
  live_call_widget_flutter:
     git:
-      url: https://gitlab.com/pressone-apps/Live-Call-Widget-Flutter
+      url: https://github.com/Pressone-Org/support-widget-flutter
 ```      
 
 Step 3: Add the Initialization Function:\
