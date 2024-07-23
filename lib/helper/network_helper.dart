@@ -14,7 +14,7 @@ class NetworkAPICall {
 
   NetworkAPICall._internal();
 
-  static const String baseUrl = "https://pressone-test-59417eaf-6e12ade0c5d8.herokuapp.com/api/";
+  static const String baseUrl = "https://api.pressone.co/api/";
 
   Future<dynamic> postHttp(String url, dynamic body,
       {Map<String, String>? header}) async {
